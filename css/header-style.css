@@ -1,0 +1,19 @@
+header{
+    min-height: 70px;
+    width:100vw; height: 10vh;
+    outline:1px solid white;
+}
+#logo-container{
+    min-width: 200px;
+    width: 25%; height: 100%;
+}
+/* logo changes on: tablet and phone devices */
+#logo{
+    width:120px; height: 120px;
+}
+/* browser window screen change at 1000px change logo container width */
+@media (max-width: 1000px) {
+    #logo-container{
+        width: 20%;
+    }
+}
