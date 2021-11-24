@@ -1,0 +1,31 @@
+<div id="tic-tac-toe-main">
+    <div>
+        <div>
+            <img src="http://localhost:3000/images/ticTacToe.png">
+        </div>
+        <div>
+            <div>
+                <form id="form">
+                    <div>
+                        <input id="username" type="text" placeholder="Username">
+                    </div>
+                    <div>
+                        <button type="submit">Find Player</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    const form = document.getElementById('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let username = e.target.elements.username.value;
+        // console.log('val:'+username);
+        socket.auth = { username };
+        socket.connect();
+    });
+    
+</script>

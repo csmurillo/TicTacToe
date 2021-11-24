@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LAYOUTS</title>
+        <link href="css/tictactoe-main.css" rel="stylesheet" type="text/css"/>
+        <link href="css/global.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body style="margin:0 auto;">
+        <%- body %>
+    </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        const URL = "http://localhost:3000";
+        const socket = io(URL,{ autoConnect: false});
+
+        // reconnection
+        function load(){
+            console.log('load');
+            const session= localStorage.getItem('sessionID');
+            console.log(session);
+            if(session){
+
+                socket.auth={session}
+                socket.connect();
+                
+            }
+        }
+
+        load();
+
+        socket.on('session',({sessionID,userID,username})=>{
+            socket.auth={ sessionID };
+            document.cookie='sessionID='+sessionID;
+            socket.userID={ userID };
+            socket.username={ username };
+
+            const url = window.location.pathname;
+            if(url == '/'){
+                window.location.href = '/other';
+            }
+
+            console.log('how many');
+        });
+
+    </script>
+</html>
