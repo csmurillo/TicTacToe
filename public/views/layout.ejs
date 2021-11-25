@@ -28,8 +28,13 @@
         }
 
         load();
-
+        socket.on('session2',({msg})=>{
+            alert('what2');
+            alert('~msg2');
+            // console.log('~msg:'+msg);
+        });
         socket.on('session',({sessionID,userID,username})=>{
+            alert('what');
             socket.auth={ sessionID };
             document.cookie='sessionID='+sessionID;
             socket.userID={ userID };
@@ -42,6 +47,6 @@
 
             console.log('how many');
         });
-
+        
     </script>
 </html>

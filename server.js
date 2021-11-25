@@ -13,6 +13,9 @@ const PORT = 3000||process.env.PORT;
 const { UserSessionStorage } = require('./sessionStorage');
 const sessionStorage = new UserSessionStorage();
 
+const { RoomFactory } = require('./roomFactory');
+const roomFactory = new RoomFactory();
+
 // set middlewares
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -62,7 +65,7 @@ io.use((socket, next) => {
 
 // set socketio stream
 io.on('connection', (socket) => {
-    console.log('a user connected'+socket.id);
+    // console.log('a user connected'+socket.id+'uuserID'+socket.userID);
 
     // save session
     sessionStorage.saveSession(
@@ -74,13 +77,27 @@ io.on('connection', (socket) => {
         }
     );
 
+    const roomID = roomFactory.joinRoom(socket.userID);
+    roomFactory.roomContent();
+    // console.log('roomid:'+roomID+'from '+socket.username);
+    // socket.join(roomID+'');
+
     // emit session details
     socket.emit('session',{
         sessionID:socket.sessionID,
         userID:socket.userID,
         username:socket.username,
+        room:roomID,
         connected:true
     });
+
+
+    // roomStorage.setRoomInProgress(roomID);
+    // if(roomStorage.isRoomInProgress(roomID)){
+    //     console.log('inside this isroominprogress');
+    //     socket.emit('newuser',{msg:'room'+roomID+'user'+socket.username});
+    // }
+    
 
     socket.on('disconnect',()=>{
         console.log('disconnected!!!');
@@ -94,12 +111,9 @@ io.on('connection', (socket) => {
             }
         );
     });
-
 });
 
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
-
-
 
