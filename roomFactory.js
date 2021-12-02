@@ -105,9 +105,8 @@ class RoomFactory {
         }
         return false;
     }
-
-    getUserRoom(userID){
-        const room=null;
+    getUserRoomID(userID){
+        let room=null;
         for (const [key, value] of this.RoomFactory.entries()) {
             if(value.player1==userID){
                 room=key;
@@ -115,6 +114,20 @@ class RoomFactory {
             }
             else if(value.player2==userID){
                 room=key;
+                break;
+            }
+        }
+        return room;
+    }
+    getUserRoom(userID){
+        let room=null;
+        for (const [key, value] of this.RoomFactory.entries()) {
+            if(value.player1==userID){
+                room=value;
+                break;
+            }
+            else if(value.player2==userID){
+                room=value;
                 break;
             }
         }

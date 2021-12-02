@@ -26,6 +26,21 @@
         // console.log('val:'+username);
         socket.auth = { username };
         socket.connect();
+        socket.emit('join-session',{});
     });
-    
+    socket.on('start-game-session',({sessionID,userID,username,roomID})=>{
+        alert('join-session');
+        socket.auth={ sessionID };
+        localStorage.setItem('sessionID',sessionID);
+        document.cookie='sessionID='+sessionID;
+        socket.userID={ userID };
+        socket.username={ username };
+
+        const url = window.location.pathname;
+        if(url == '/'){
+            window.location.href = '/'+roomID;
+        }
+
+        console.log('how many');
+    });
 </script>

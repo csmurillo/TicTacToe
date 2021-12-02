@@ -27,21 +27,27 @@ app.use(expressLayouts);
 app.set('views', './public/views');
 app.set('view engine','ejs');
 
-const {isAuthenticated,redirect} = require('./middleware/verify-auth');
+const {isAuthenticated,redirect,existentRoom} = require('./middleware/verify-auth');
 
 // set routes
-app.get('',isAuthenticated(sessionStorage),redirect,(req,res)=>{
+app.get('',isAuthenticated(sessionStorage),existentRoom(sessionStorage),redirect,(req,res)=>{
     res.render('index.ejs');
 });
 
-app.get('/other',isAuthenticated(sessionStorage),redirect,(req,res)=>{
-    res.render('other.ejs');
+app.get('/:roomID',isAuthenticated(sessionStorage),redirect,(req,res)=>{
+    res.render('room.ejs');
 });
+
+// app.get('/other',isAuthenticated(sessionStorage),redirect,(req,res)=>{
+//     res.render('other.ejs');
+// });
 
 // set socketio middleware
 io.use((socket, next) => {
+    console.log('middleware');
     const sessionID = socket.handshake.auth.session;
     if (sessionID) {
+        console.log('exist');
         // check for existing session
         const session = sessionStorage.getSession(sessionID);
         if (session) {
@@ -65,39 +71,83 @@ io.use((socket, next) => {
 
 // set socketio stream
 io.on('connection', (socket) => {
-    // console.log('a user connected'+socket.id+'uuserID'+socket.userID);
-
+    console.log('a user connected userID'+socket.userID);
     // save session
     sessionStorage.saveSession(
         socket.sessionID,
         {
             userID:socket.userID,
             username:socket.username,
+            room:roomFactory.getUserRoom(socket.userID),
             connected:true
         }
     );
 
-    const roomID = roomFactory.joinRoom(socket.userID);
-    roomFactory.roomContent();
-    // console.log('roomid:'+roomID+'from '+socket.username);
-    // socket.join(roomID+'');
+    // join session
+    socket.on('join-session',()=>{
+        const roomID = roomFactory.joinRoom(socket.userID);
 
-    // emit session details
-    socket.emit('session',{
-        sessionID:socket.sessionID,
-        userID:socket.userID,
-        username:socket.username,
-        room:roomID,
-        connected:true
+        console.log('joinsesh'+roomID);
+
+        socket.emit('start-game-session',{
+            sessionID:socket.sessionID,
+            userID:socket.userID,
+            username:socket.username,
+            roomID:roomID,
+            room:roomFactory.getUserRoom(socket.userID),
+            connected:true
+        });
+        // save session
+        sessionStorage.saveSession(
+            socket.sessionID,
+            {
+                userID:socket.userID,
+                username:socket.username,
+                roomID:roomFactory.getUserRoomID(socket.userID),
+                connected:true
+            }
+        );
     });
 
+    // game session
+    socket.on('game-session',()=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        let room=roomFactory.getUserRoom(socket.userID);
+        let player1=room.player1;
+        let player2=room.player2;
+        socket.join(''+roomID);
+        if(player1&&player2){
+            // console.log('hit who was it '+socket.username);
+            // game in progress
+            // socket.emit('game',{
+            //     sessionID:socket.sessionID,
+            //     userID:socket.userID,
+            //     username:socket.username,
+            //     roomID:roomFactory.getUserRoomID(socket.userID),
+            //     room:roomFactory.getUserRoom(socket.userID),
+            //     connected:true
+            // });
+            // game in progress
+            io.in(''+roomID).emit('game',{
+                sessionID:socket.sessionID,
+                userID:socket.userID,
+                username:socket.username,
+                roomID:roomFactory.getUserRoomID(socket.userID),
+                room:roomFactory.getUserRoom(socket.userID),
+                connected:true
+            });
 
-    // roomStorage.setRoomInProgress(roomID);
-    // if(roomStorage.isRoomInProgress(roomID)){
-    //     console.log('inside this isroominprogress');
-    //     socket.emit('newuser',{msg:'room'+roomID+'user'+socket.username});
-    // }
-    
+        }   
+        else{
+            socket.emit('loading-game',{
+                loading:'loading'
+            });
+        }     
+    });
+    // game start
+    socket.on('game',()=>{
+
+    });    
 
     socket.on('disconnect',()=>{
         console.log('disconnected!!!');
@@ -107,6 +157,7 @@ io.on('connection', (socket) => {
             {
                 userID:socket.userID,
                 username:socket.username,
+                room:roomFactory.getUserRoom(socket.userID),
                 connected:false
             }
         );
@@ -116,4 +167,5 @@ io.on('connection', (socket) => {
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
+
 
