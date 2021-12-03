@@ -117,16 +117,6 @@ io.on('connection', (socket) => {
         let player2=room.player2;
         socket.join(''+roomID);
         if(player1&&player2){
-            // console.log('hit who was it '+socket.username);
-            // game in progress
-            // socket.emit('game',{
-            //     sessionID:socket.sessionID,
-            //     userID:socket.userID,
-            //     username:socket.username,
-            //     roomID:roomFactory.getUserRoomID(socket.userID),
-            //     room:roomFactory.getUserRoom(socket.userID),
-            //     connected:true
-            // });
             // game in progress
             io.in(''+roomID).emit('game',{
                 sessionID:socket.sessionID,
@@ -145,7 +135,7 @@ io.on('connection', (socket) => {
         }     
     });
     // game start
-    socket.on('game',()=>{
+    socket.on('board-game',()=>{
 
     });    
 
