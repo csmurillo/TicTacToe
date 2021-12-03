@@ -1,0 +1,192 @@
+#mobile-players-details{
+    display:none;
+}
+#room{
+    width: 100vw; height:100vh;
+    display: flex;
+    background-color: blue;
+}
+#player-1-info,#player-2-info{
+    width:20%; height: 100%;
+}
+#player-1-container{
+    height:80%;
+    outline: 1px solid white;
+    background-color: rgb(0, 0, 0);
+    color:white;
+    font-size: 96px;
+}
+#player-1-username-container{
+    height: 20%;
+    background-color: rgb(0, 0, 0);
+    color:lightgreen;
+    outline: 1px solid white;
+    font-size: 24px;
+}
+#player-2-container{
+    height:80%;
+    outline: 1px solid white;
+    background-color: rgb(0, 0, 0);
+    color:white;
+    font-size: 96px;
+}
+#player-2-username-container{
+    height: 20%;
+    background-color: rgb(0, 0, 0);
+    color:rgb(0, 89, 255);
+    outline: 1px solid white;
+    font-size: 24px;
+}
+#ttt-container{
+    width:60%; height: 100%;
+    background-color: rgb(0, 0, 0);
+    outline: 1px solid white;
+}
+#ttt-board-container{
+    width: 100%; height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#ttt-board{
+    min-width: 400px; min-height: 400px;
+    width:500px; height: 500px;
+}
+#ttt-board-current-player{
+    height: 20%;
+    background-color: black;
+    color:white;
+    outline: 1px solid white;
+}
+.ttt-row{
+    width: 100%;
+    height: 33.33%;
+    display: flex;
+}
+.ttt-block{
+    width: 33.33%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    outline:1px solid black;
+}
+/* screen transition tictactoe board smaller */
+@media (max-width: 992px) {
+    #ttt-board{
+        width:450px; height: 450px;
+        background-color: blue;
+    }
+}
+/* Small screens (676px below) */
+@media (max-width: 676px) {
+    #room{
+        display: block;
+    }
+    /* remove desktop site elements from screen */
+    #player-1-info,#player-2-info,#ttt-board-current-player{
+        display: none;
+    }
+    #ttt-container{
+        width:100%; height: 80%;
+        background-color: rgb(0, 0, 0);
+    }
+    #ttt-board-container{
+        width: 100%; height: 100%;
+    }
+    #ttt-board-current-player-mobile{
+        width: 60%; height: 100%;
+        background-color: rgb(0, 0, 0);
+        color:white;
+        outline: 1px solid white;
+        font-size: 24px;
+    }
+    #mobile-players-details{
+        display: flex;
+        height: 20%;
+    }
+    #player-1-info-mobile, #player-2-info-mobile{
+        width:20%; height: 100%;
+        background-color: rgb(0, 0, 0);
+        outline: 1px solid white;
+    }
+    #player-1-container-mobile{
+        width: 100%; height: 60%;
+        color:white;
+        font-size: 54px;
+    }
+    #player-1-username-container-mobile{
+        width: 100%; height: 40%;
+        color:lightgreen;
+        font-size: 20px;
+    }
+    #player-2-container-mobile{
+        width: 100%; height: 60%;
+        color:white;
+        font-size: 54px;
+    }
+    #player-2-username-container-mobile{
+        width: 100%; height: 40%;
+        color:blue;
+        font-size: 20px;
+    }
+}
+/* mobile phones */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    #room{
+        display: block;
+    }
+    /* remove desktop site elements from screen */
+    #player-1-info,#player-2-info,#ttt-board-current-player{
+        display: none;
+    }
+    #mobile-players-details{
+        display: flex;
+        height: 20%;
+    }
+    #ttt-container{
+        width:100%; height: 80%;
+        background-color: rgb(0, 0, 0);
+    }
+    #ttt-board-container{
+        width: 100%; height: 100%;
+    }
+    #ttt-board{
+        width:700px; height: 700px;
+        background-color: blue;
+    }
+    #player-1-info-mobile, #player-2-info-mobile{
+        width:20%; height: 100%;
+        background-color: rgb(0, 0, 0);
+        outline: 1px solid white;
+    }
+    #ttt-board-current-player-mobile{
+        width: 60%; height: 100%;
+        background-color: rgb(0, 0, 0);
+        color:white;
+        outline: 1px solid white;
+        font-size: 24px;
+    }
+    #player-1-container-mobile{
+        width: 100%; height: 60%;
+        color:white;
+        font-size: 58px;
+    }
+    #player-1-username-container-mobile{
+        width: 100%; height: 40%;
+        font-size: 42px;
+        color:lightgreen;
+    }
+    #player-2-container-mobile{
+        width: 100%; height: 60%;
+        color:white;
+        font-size: 58px;
+    }
+    #player-2-username-container-mobile{
+        width: 100%; height: 40%;
+        color:blue;
+        font-size: 42px;
+    }
+}
+
