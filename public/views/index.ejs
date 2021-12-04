@@ -1,24 +1,21 @@
 <div id="tic-tac-toe-main">
-    <div>
-        <div>
-            <img src="http://localhost:3000/images/ticTacToe.png">
+    <main>
+        <div id="logo-container">
+            <img id="logo" src="http://localhost:3000/images/ticTacToe.png">
         </div>
-        <div>
-            <div>
-                <form id="form">
-                    <div>
-                        <input id="username" type="text" placeholder="Username">
-                    </div>
-                    <div>
-                        <button type="submit">Find Player</button>
-                    </div>
-                </form>
-            </div>
+        <div id="form-container">
+            <form id="form" autocomplete="off">
+                <div id="username-container" class="center">
+                    <input id="username" type="text" placeholder="Username">
+                </div>
+                <div id="find-player-container" class="center">
+                    <button id="find-player-btn" type="submit">Find Player</button>
+                </div>
+            </form>
         </div>
-    </div>
+    </main>
 </div>
 <script>
-
     const form = document.getElementById('form');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -40,7 +37,5 @@
         if(url == '/'){
             window.location.href = '/'+roomID;
         }
-
-        console.log('how many');
     });
 </script>

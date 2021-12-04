@@ -1,0 +1,84 @@
+<div id="room">
+    <div id="player-1-info">
+        <div id="player-1-container" class="center">
+            1
+        </div>
+        <div id="player-1-username-container" class="center">
+            Bola
+        </div>    
+    </div>
+    <div id="ttt-container">
+        <div id="ttt-board-container">
+            <div id="ttt-board">
+                <div class="ttt-row">
+                    <div id='a0' class="ttt-block"></div>
+                    <div id='a1' class="ttt-block"></div>
+                    <div id='a2' class="ttt-block"></div>
+                </div>
+                <div class="ttt-row">
+                    <div id='a3' class="ttt-block"></div>
+                    <div id='a4' class="ttt-block"></div>
+                    <div id='a5' class="ttt-block"></div>
+                </div>
+                <div class="ttt-row">
+                    <div id='a6' class="ttt-block"></div>
+                    <div id='a7' class="ttt-block"></div>
+                    <div id='a8' class="ttt-block"></div>
+                </div>
+            </div>
+        </div>
+        <div id="ttt-board-current-player" class="center">
+            Player turn
+        </div>
+    </div>
+    <!-- mobile -->
+    <div id="mobile-players-details">
+        <div id="player-1-info-mobile">
+            <div id="player-1-container-mobile" class="center">
+                1
+            </div>
+            <div id="player-1-username-container-mobile" class="center">
+                Bola
+            </div>  
+        </div>
+        <div id="ttt-board-current-player-mobile" class="center">
+            player turn
+        </div>
+        <div id="player-2-info-mobile">
+            <div id="player-2-container-mobile" class="center">
+                2
+            </div>
+            <div id="player-2-username-container-mobile" class="center">
+                Juan
+            </div>  
+        </div>
+    </div>
+    <div id="player-2-info">
+        <div id="player-2-container" class="center">
+            2
+        </div>
+        <div id="player-2-username-container" class="center">
+            Juan
+        </div>    
+    </div>
+</div>
+
+
+
+<script>
+    socket.emit('game-session',{});
+    socket.on('game',({sessionID,userID,username,roomID,room})=>{
+        console.log('!!!!!!PLAYER'+room);
+        var player1=document.getElementById("player-1-username");
+        var player2=document.getElementById("player-2-username");
+        // set players
+        player1.innerHTML=room.player1;
+        player2.innerHTML=room.player2;
+        
+        // socket.emit('board-game',{});
+    });
+    socket.on('loading-game',()=>{
+        alert('loading');
+        console.log('loading');
+    });
+</script>
