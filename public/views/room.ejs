@@ -4,7 +4,8 @@
             1
         </div>
         <div id="player-1-username-container" class="center">
-            Bola
+            <div id="player-1-username">
+            </div>
         </div>    
     </div>
     <div id="ttt-container">
@@ -38,7 +39,9 @@
                 1
             </div>
             <div id="player-1-username-container-mobile" class="center">
-                Bola
+                <div id="player-1-username-mobile">
+                    
+                </div>
             </div>  
         </div>
         <div id="ttt-board-current-player-mobile" class="center">
@@ -49,7 +52,9 @@
                 2
             </div>
             <div id="player-2-username-container-mobile" class="center">
-                Juan
+                <div id="player-2-username-mobile">
+                    
+                </div>
             </div>  
         </div>
     </div>
@@ -58,27 +63,89 @@
             2
         </div>
         <div id="player-2-username-container" class="center">
-            Juan
+            <div id="player-2-username">
+                    
+            </div>
         </div>    
     </div>
 </div>
-
-
+<div id="searching-for-player-container">
+    <div id="searching-for-player"></div>
+</div>
+<div id="wait-player-choose-turn-prompt-container">
+    <div id="wait-for-player"></div>
+</div>
+<div id="player-turn-prompt-container">
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body center">
+                <div>
+                    <div>
+                        <div id="title-prompt-container">
+                            Please Choose Turn:
+                        </div>
+                    </div>
+                    <div>
+                        <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn</button>
+                        <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
 
 <script>
+    function chooseTurnPrompt(turnChoosen){
+        alert('chosen');
+        $('#exampleModalCenter').modal('hide');
+        socket.emit('set-players-turns',{turnChoosen});
+    }
+
     socket.emit('game-session',{});
+
     socket.on('game',({sessionID,userID,username,roomID,room})=>{
+        var searchingForPlayer=document.getElementById("searching-for-player");
+        searchingForPlayer.style="display:none;";
         console.log('!!!!!!PLAYER'+room);
         var player1=document.getElementById("player-1-username");
         var player2=document.getElementById("player-2-username");
+        var player1Mobile=document.getElementById("player-1-username-mobile");
+        var player2Mobile=document.getElementById("player-2-username-mobile");
         // set players
-        player1.innerHTML=room.player1;
-        player2.innerHTML=room.player2;
-        
-        // socket.emit('board-game',{});
+        player1.innerHTML=room.player1Username;
+        player2.innerHTML=room.player2Username;
+        player1Mobile.innerHTML=room.player1Username;
+        player2Mobile.innerHTML=room.player2Username;
+
+        socket.emit('choose-turn-prompt-session',{});
     });
-    socket.on('loading-game',()=>{
-        alert('loading');
-        console.log('loading');
+    
+    socket.on('searching',()=>{
+        var searchingForPlayer=document.getElementById("searching-for-player");
+        searchingForPlayer.innerHTML="Searching For Player ...";
+    });
+
+    socket.on('player-choose-turn-prompt-session',()=>{
+        console.log('choose-prompt-session');
+        $('#exampleModalCenter').modal('show');
+    });
+
+    socket.on('wait-player-choose-turn-prompt-session',()=>{
+        var waitingForPlayer=document.getElementById("wait-for-player");
+        waitingForPlayer.innerHTML="Waiting For Player To Choose Turn ...";
+    });
+
+    socket.on('tictactoe-start',({board,currentTurn})=>{
+        var waitingForPlayer=document.getElementById("wait-for-player");
+        waitingForPlayer.innerHTML="";
+        var tttBoardCurrentPlayer=document.getElementById("ttt-board-current-player");
+        var tttBoardCurrentPlayerMobile=document.getElementById("ttt-board-current-player-mobile");
+        tttBoardCurrentPlayer.innerHTML="Current Turn: "+currentTurn;
+        tttBoardCurrentPlayerMobile.innerHTML="Current Turn: "+currentTurn;
+        console.log(board);
     });
 </script>

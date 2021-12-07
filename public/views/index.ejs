@@ -26,7 +26,6 @@
         socket.emit('join-session',{});
     });
     socket.on('start-game-session',({sessionID,userID,username,roomID})=>{
-        alert('join-session');
         socket.auth={ sessionID };
         localStorage.setItem('sessionID',sessionID);
         document.cookie='sessionID='+sessionID;

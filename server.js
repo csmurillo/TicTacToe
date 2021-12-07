@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
 
     // join session
     socket.on('join-session',()=>{
-        const roomID = roomFactory.joinRoom(socket.userID);
+        const roomID = roomFactory.joinRoom(socket.userID,socket.username);
 
         console.log('joinsesh'+roomID);
 
@@ -112,10 +112,13 @@ io.on('connection', (socket) => {
     // game session
     socket.on('game-session',()=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
+        roomFactory.setRoomPlayerFirstTurn(roomID);
         let room=roomFactory.getUserRoom(socket.userID);
+
         let player1=room.player1;
         let player2=room.player2;
         socket.join(''+roomID);
+        
         if(player1&&player2){
             // game in progress
             io.in(''+roomID).emit('game',{
@@ -126,18 +129,49 @@ io.on('connection', (socket) => {
                 room:roomFactory.getUserRoom(socket.userID),
                 connected:true
             });
-
         }   
         else{
-            socket.emit('loading-game',{
-                loading:'loading'
+            socket.emit('searching',{
+                searching:true
             });
         }     
     });
+
+    socket.on('choose-turn-prompt-session',()=>{
+        let room=roomFactory.getUserRoom(socket.userID);
+        let playerTurn=room.playerFirstTurn;
+        if(playerTurn==socket.userID){
+            socket.emit('player-choose-turn-prompt-session',{});
+        }
+        else{
+            socket.emit('wait-player-choose-turn-prompt-session',{});
+        }
+    });
+
     // game start
+    socket.on('set-players-turns',({turnChoosen})=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        let room=roomFactory.getUserRoom(socket.userID);
+        if(turnChoosen=='first'){
+            roomFactory.setRoomPlayerTurn(socket.username,roomID);
+        }
+        else if(turnChoosen=='second'){
+            roomFactory.setRoomPlayerTurn(room.player2Username,roomID);
+        }
+        let updatedRoom=roomFactory.getUserRoom(socket.userID);
+        io.in(''+roomID).emit('tictactoe-start',{
+            board:roomFactory.getRoomBoardGame(roomID),
+            currentTurn:updatedRoom.playerTurn
+        });
+    });
+
     socket.on('board-game',()=>{
 
-    });    
+    });
+
+    socket.on('rematch',()=>{
+
+    });
 
     socket.on('disconnect',()=>{
         console.log('disconnected!!!');
@@ -157,5 +191,11 @@ io.on('connection', (socket) => {
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
+
+
+
+
+
+
 
 

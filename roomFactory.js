@@ -29,31 +29,37 @@ class RoomFactory {
             this.RoomFactory.set(uuidv4(),{
                 board:new BoardGame(),
                 player1:null,
+                player1Username:null,
                 player1Symbol:null,
                 player2:null,
+                player2Username:null,
                 player2Symbol:null,
+                playerFirstTurn:null,
                 playerTurn:null,
                 roomInProgress:false,
                 playersExit:false,
             });
         }    
     }
-
+    updateRoomBoard(board,roomID){
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room,board:board});
+    }
     getRoomBoardGame(roomID){
         const {board}=this.RoomFactory.get(roomID);
         return board;
     }
 
-    joinRoom(userID){
+    joinRoom(userID,username){
         let roomJoined=null;
         for (const [key, value] of this.RoomFactory.entries()) {
             if(value.player1==null){
-                this.RoomFactory.set(key,{...value, player1:userID});
+                this.RoomFactory.set(key,{...value, player1:userID,player1Username:username});
                 roomJoined=key;
                 break;
             }
             else if(value.player2==null){
-                this.RoomFactory.set(key,{...value, player2:userID});
+                this.RoomFactory.set(key,{...value, player2:userID,player2Username:username});
                 roomJoined=key;
                 break;
             }
@@ -73,7 +79,17 @@ class RoomFactory {
             }
         }
     }
-
+    setRoomPlayerFirstTurn(roomID){
+        const room=this.RoomFactory.get(roomID);
+        const {player1,player2,playerFirstTurn}=room;
+        if(playerFirstTurn==null){
+            this.RoomFactory.set(roomID,{...room,playerFirstTurn:player1});
+        }
+    }
+    setRoomPlayerTurn(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room,playerTurn:userID});
+    }
     setRoomInProgress(roomID){
         const room=this.RoomFactory.get(roomID);
         const {player1,player2}=room;
