@@ -12,8 +12,8 @@ class BoardGame{
     rematch(){
 
     }
-    setValue(num,value){
-
+    setValue(pos,value){
+        // this.board[]
     }
 }
 
@@ -41,14 +41,7 @@ class RoomFactory {
             });
         }    
     }
-    updateRoomBoard(board,roomID){
-        const room=this.RoomFactory.get(roomID);
-        this.RoomFactory.set(roomID,{...room,board:board});
-    }
-    getRoomBoardGame(roomID){
-        const {board}=this.RoomFactory.get(roomID);
-        return board;
-    }
+    
 
     joinRoom(userID,username){
         let roomJoined=null;
@@ -79,12 +72,51 @@ class RoomFactory {
             }
         }
     }
+
     setRoomPlayerFirstTurn(roomID){
         const room=this.RoomFactory.get(roomID);
         const {player1,player2,playerFirstTurn}=room;
         if(playerFirstTurn==null){
             this.RoomFactory.set(roomID,{...room,playerFirstTurn:player1});
         }
+    }
+    getPlayerPosition(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        const {player1,player2}=room;
+        if(userID==player1){
+            return 'player1';
+        }
+        else if(userID==player2){
+            return 'player2';
+        }
+    }
+    setPlayerSymbol(userID,playerSymbol,roomID){
+        const room=this.RoomFactory.get(roomID);
+        const {player1,player2}=room;
+        if(userID==player1){
+            this.RoomFactory.set(roomID,{...room,player1Symbol:playerSymbol});
+        }
+        else if(userID==player2){
+            this.RoomFactory.set(roomID,{...room,player2Symbol:playerSymbol});
+        }
+    }
+
+    getCurrentRoomPlayerTurn(roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.playerTurn==room.player1){
+            return room.player1Username;
+        }
+        else if(room.playerTurn==room.player2){
+            return room.player2Username;
+        }
+    }
+    updateRoomBoard(board,roomID){
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room,board:board});
+    }
+    getRoomBoardGame(roomID){
+        const {board}=this.RoomFactory.get(roomID);
+        return board;
     }
     setRoomPlayerTurn(userID,roomID){
         const room=this.RoomFactory.get(roomID);

@@ -12,19 +12,19 @@
         <div id="ttt-board-container">
             <div id="ttt-board">
                 <div class="ttt-row">
-                    <div id='a0' class="ttt-block"></div>
-                    <div id='a1' class="ttt-block"></div>
-                    <div id='a2' class="ttt-block"></div>
+                    <div id='a0' class="ttt-block" onclick="tictactoeBoard('0')"></div>
+                    <div id='a1' class="ttt-block" onclick="tictactoeBoard('1')"></div>
+                    <div id='a2' class="ttt-block" onclick="tictactoeBoard('2')"></div>
                 </div>
                 <div class="ttt-row">
-                    <div id='a3' class="ttt-block"></div>
-                    <div id='a4' class="ttt-block"></div>
-                    <div id='a5' class="ttt-block"></div>
+                    <div id='a3' class="ttt-block" onclick="tictactoeBoard('3')"></div>
+                    <div id='a4' class="ttt-block" onclick="tictactoeBoard('4')"></div>
+                    <div id='a5' class="ttt-block" onclick="tictactoeBoard('5')"></div>
                 </div>
                 <div class="ttt-row">
-                    <div id='a6' class="ttt-block"></div>
-                    <div id='a7' class="ttt-block"></div>
-                    <div id='a8' class="ttt-block"></div>
+                    <div id='a6' class="ttt-block" onclick="tictactoeBoard('6')"></div>
+                    <div id='a7' class="ttt-block" onclick="tictactoeBoard('7')"></div>
+                    <div id='a8' class="ttt-block" onclick="tictactoeBoard('8')"></div>
                 </div>
             </div>
         </div>
@@ -88,8 +88,8 @@
                         </div>
                     </div>
                     <div>
-                        <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn</button>
-                        <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn</button>
+                        <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn (X)</button>
+                        <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn (O)</button>
                     </div>
                 </div>
             </div>
@@ -99,15 +99,30 @@
 </div>
 
 <script>
+
     function chooseTurnPrompt(turnChoosen){
-        alert('chosen');
+        // alert('chosen');
         $('#exampleModalCenter').modal('hide');
         socket.emit('set-players-turns',{turnChoosen});
     }
 
+    function tictactoeBoard(markPos){
+            var roomID=localStorage.getItem('roomID');
+            console.log('markPos:'+markPos+'socketid'+socket.userID);  
+            socket.emit('board-game',{
+                markPos,
+                player:socket.userID
+            });   
+    }
+    socket.on('board-game',({board,currentTurn})=>{
+        console.log('board'+board);
+        console.log('current-turn'+currentTurn);
+    });
     socket.emit('game-session',{});
 
     socket.on('game',({sessionID,userID,username,roomID,room})=>{
+        socket.userID=userID;
+        localStorage.setItem('roomID',roomID);
         var searchingForPlayer=document.getElementById("searching-for-player");
         searchingForPlayer.style="display:none;";
         console.log('!!!!!!PLAYER'+room);
@@ -139,7 +154,7 @@
         waitingForPlayer.innerHTML="Waiting For Player To Choose Turn ...";
     });
 
-    socket.on('tictactoe-start',({board,currentTurn})=>{
+    socket.on('tictactoe-start',({board,currentTurn,player1Symbol,player2Symbol})=>{
         var waitingForPlayer=document.getElementById("wait-for-player");
         waitingForPlayer.innerHTML="";
         var tttBoardCurrentPlayer=document.getElementById("ttt-board-current-player");
@@ -147,5 +162,14 @@
         tttBoardCurrentPlayer.innerHTML="Current Turn: "+currentTurn;
         tttBoardCurrentPlayerMobile.innerHTML="Current Turn: "+currentTurn;
         console.log(board);
+        // 
+        var player1=document.getElementById("player-1-username");
+        var player2=document.getElementById("player-2-username");
+        console.log(player2Symbol+''+player1Symbol);
+        // var player1Mobile=document.getElementById("player-1-username-mobile");
+        // var player2Mobile=document.getElementById("player-2-username-mobile");
+        player1.innerHTML='('+player1Symbol+') '+player1.innerHTML;
+        player2.innerHTML='('+player2Symbol+') '+player2.innerHTML;
+
     });
 </script>

@@ -152,21 +152,57 @@ io.on('connection', (socket) => {
     socket.on('set-players-turns',({turnChoosen})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
         let room=roomFactory.getUserRoom(socket.userID);
-        if(turnChoosen=='first'){
-            roomFactory.setRoomPlayerTurn(socket.username,roomID);
+        let playerPos=roomFactory.getPlayerPosition(socket.userID,roomID);
+        if(playerPos=='player1'){
+            if(turnChoosen=='first'){
+                roomFactory.setRoomPlayerTurn(socket.userID,roomID);
+                roomFactory.setPlayerSymbol(socket.userID,'X',roomID);
+                roomFactory.setPlayerSymbol(room.player2,'O',roomID);
+            }
+            else if(turnChoosen=='second'){
+                roomFactory.setRoomPlayerTurn(room.player2,roomID);
+                roomFactory.setPlayerSymbol(room.player2,'X',roomID);
+                roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
+            }
         }
-        else if(turnChoosen=='second'){
-            roomFactory.setRoomPlayerTurn(room.player2Username,roomID);
-        }
-        let updatedRoom=roomFactory.getUserRoom(socket.userID);
+
+
+        let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
+        let rm=roomFactory.getUserRoom(socket.userID);
+        // let updatedRoom=roomFactory.getUserRoom(socket.userID);
         io.in(''+roomID).emit('tictactoe-start',{
             board:roomFactory.getRoomBoardGame(roomID),
-            currentTurn:updatedRoom.playerTurn
+            currentTurn:currentPlayerTurn,
+            // player1:room.player1,
+            // player2:room.player2,
+            player1Symbol:rm.player1Symbol,
+            player2Symbol:rm.player2Symbol
         });
     });
 
-    socket.on('board-game',()=>{
-
+    socket.on('board-game',({markPos,player})=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        let room=roomFactory.getUserRoom(socket.userID);
+        // console.log('player'+socket.userID+'roomPLayer'+room.playerTurn+'!!!');
+        if(room.playerTurn==socket.userID){
+            // console.log('player'+socket.userID+'allowed to mark');
+            if(room.playerTurn!=room.player1){
+                roomFactory.setRoomPlayerTurn(room.player1,roomID);
+            }
+            else if(room.playerTurn!=room.player2){
+                roomFactory.setRoomPlayerTurn(room.player2,roomID);
+            }
+            // console.log();
+            let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
+            io.in(''+roomID).emit('board-game',{
+                board:roomFactory.getRoomBoardGame(roomID),
+                currentTurn:currentPlayerTurn
+            });
+        }
+        // socket.to(''+roomID).emit();
+        // room.playerTurn
+        // console.log('player'+player+'marked: '+markPos);
+        // socket.to().emit('board-game');
     });
 
     socket.on('rematch',()=>{
