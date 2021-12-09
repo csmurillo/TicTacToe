@@ -80,16 +80,20 @@ class RoomFactory {
             this.RoomFactory.set(roomID,{...room,playerFirstTurn:player1});
         }
     }
-    getPlayerPosition(userID,roomID){
+
+    setRoomPlayerTurn(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room,playerTurn:userID});
+    }
+
+    setRoomInProgress(roomID){
         const room=this.RoomFactory.get(roomID);
         const {player1,player2}=room;
-        if(userID==player1){
-            return 'player1';
-        }
-        else if(userID==player2){
-            return 'player2';
+        if(player1!=null&&player2!=null){
+            this.RoomFactory.set(roomID,{...room,roomInProgress:true});
         }
     }
+    
     setPlayerSymbol(userID,playerSymbol,roomID){
         const room=this.RoomFactory.get(roomID);
         const {player1,player2}=room;
@@ -101,43 +105,6 @@ class RoomFactory {
         }
     }
 
-    getCurrentRoomPlayerTurn(roomID){
-        const room=this.RoomFactory.get(roomID);
-        if(room.playerTurn==room.player1){
-            return room.player1Username;
-        }
-        else if(room.playerTurn==room.player2){
-            return room.player2Username;
-        }
-    }
-    updateRoomBoard(board,roomID){
-        const room=this.RoomFactory.get(roomID);
-        this.RoomFactory.set(roomID,{...room,board:board});
-    }
-    getRoomBoardGame(roomID){
-        const {board}=this.RoomFactory.get(roomID);
-        return board;
-    }
-    setRoomPlayerTurn(userID,roomID){
-        const room=this.RoomFactory.get(roomID);
-        this.RoomFactory.set(roomID,{...room,playerTurn:userID});
-    }
-    setRoomInProgress(roomID){
-        const room=this.RoomFactory.get(roomID);
-        const {player1,player2}=room;
-        if(player1!=null&&player2!=null){
-            this.RoomFactory.set(roomID,{...room,roomInProgress:true});
-        }
-    }
-
-    isRoomInProgress(roomID){
-        const {roomInProgress}=this.RoomFactory.get(roomID);
-        if(roomInProgress){
-            return true;
-        }
-        return false;
-    }
-
     setPlayersExit(roomID){
         const room=this.RoomFactory.get(roomID);
         const {player1,player2}=room;
@@ -146,27 +113,6 @@ class RoomFactory {
         }
     }
 
-    isRoomPlayersExit(roomID){
-        const {playersExit}=this.RoomFactory.get(roomID);
-        if(playersExit){
-            return true;
-        }
-        return false;
-    }
-    getUserRoomID(userID){
-        let room=null;
-        for (const [key, value] of this.RoomFactory.entries()) {
-            if(value.player1==userID){
-                room=key;
-                break;
-            }
-            else if(value.player2==userID){
-                room=key;
-                break;
-            }
-        }
-        return room;
-    }
     getUserRoom(userID){
         let room=null;
         for (const [key, value] of this.RoomFactory.entries()) {
@@ -181,6 +127,113 @@ class RoomFactory {
         }
         return room;
     }
+    
+    getUserRoomID(userID){
+        let room=null;
+        for (const [key, value] of this.RoomFactory.entries()) {
+            if(value.player1==userID){
+                room=key;
+                break;
+            }
+            else if(value.player2==userID){
+                room=key;
+                break;
+            }
+        }
+        return room;
+    }
+
+    getRoomBoardGame(roomID){
+        const {board}=this.RoomFactory.get(roomID);
+        return board;
+    }
+
+    getRoomPlayer1Username(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player1Username;
+    }
+
+    getRoomPlayer1(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player1;
+    }
+
+    getRoomPlayer2Username(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player2Username;
+    }
+
+    getRoomPlayer2(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player2;
+    }
+
+    getPlayer1Symbol(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player1Symbol;
+    }
+    
+    getPlayer2Symbol(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player2Symbol;
+    }
+    
+    getPlayerPosition(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        const {player1,player2}=room;
+        if(userID==player1){
+            return 'player1';
+        }
+        else if(userID==player2){
+            return 'player2';
+        }
+    }
+
+    getRoomPlayerFirstTurn(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.playerFirstTurn;
+    }
+
+    getCurrentRoomPlayerUsernameTurn(roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.playerTurn==room.player1){
+            return room.player1Username;
+        }
+        else if(room.playerTurn==room.player2){
+            return room.player2Username;
+        }
+    }
+
+    getCurrentRoomPlayerTurn(roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.playerTurn==room.player1){
+            return room.player1;
+        }
+        else if(room.playerTurn==room.player2){
+            return room.player2;
+        }
+    }
+
+    isRoomInProgress(roomID){
+        const {roomInProgress}=this.RoomFactory.get(roomID);
+        if(roomInProgress){
+            return true;
+        }
+        return false;
+    }
+
+    isRoomPlayersExit(roomID){
+        const {playersExit}=this.RoomFactory.get(roomID);
+        if(playersExit){
+            return true;
+        }
+        return false;
+    }
+    updateRoomBoard(board,roomID){
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room,board:board});
+    }
+    
 
     clearRoom(roomID){
         this.RoomFactory.set(roomID,{

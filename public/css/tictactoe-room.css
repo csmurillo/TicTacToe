@@ -1,3 +1,12 @@
+#ttt-prompts-containers{
+    width:100vw; height:100vh;
+    position: absolute;
+    top:0px;
+}
+#ttt-prompts-placeholder{
+    position: relative;
+    top:0px;
+}
 #wait-player-choose-turn-prompt-container{
     width:100vw; height: 100vh;
     display: flex;

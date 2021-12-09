@@ -69,107 +69,56 @@
         </div>    
     </div>
 </div>
-<div id="searching-for-player-container">
-    <div id="searching-for-player"></div>
-</div>
-<div id="wait-player-choose-turn-prompt-container">
-    <div id="wait-for-player"></div>
-</div>
-<div id="player-turn-prompt-container">
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body center">
-                <div>
-                    <div>
-                        <div id="title-prompt-container">
-                            Please Choose Turn:
+
+<div id="ttt-prompts-containers">
+    <div id="ttt-prompts-placeholder">
+        <div id="searching-for-player-container">
+            <div id="searching-for-player"></div>
+        </div>
+        <div id="wait-player-choose-turn-prompt-container">
+            <div id="wait-for-player"></div>
+        </div>
+        <div id="player-turn-prompt-container">
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body center">
+                        <div>
+                            <div>
+                                <div id="title-prompt-container">
+                                    Please Choose Turn:
+                                </div>
+                            </div>
+                            <div>
+                                <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn (X)</button>
+                                <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn (O)</button>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn (X)</button>
-                        <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn (O)</button>
-                    </div>
+                </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 </div>
 
+<script src="../js/room/roomSession.js"></script>
+<script src="../js/room/chooseTurnPromptSession.js"></script>
+<script src="../js/room/setPlayersTurns.js"></script>
+<script src="../js/room/tictactoeStartGame.js"></script>
 <script>
-
-    function chooseTurnPrompt(turnChoosen){
-        // alert('chosen');
-        $('#exampleModalCenter').modal('hide');
-        socket.emit('set-players-turns',{turnChoosen});
-    }
-
     function tictactoeBoard(markPos){
             var roomID=localStorage.getItem('roomID');
             console.log('markPos:'+markPos+'socketid'+socket.userID);  
-            socket.emit('board-game',{
+            socket.emit('tictactoe-game',{
                 markPos,
                 player:socket.userID
             });   
     }
-    socket.on('board-game',({board,currentTurn})=>{
+
+    socket.on('tictactoe-game',({board,currentTurn})=>{
         console.log('board'+board);
         console.log('current-turn'+currentTurn);
-    });
-    socket.emit('game-session',{});
-
-    socket.on('game',({sessionID,userID,username,roomID,room})=>{
-        socket.userID=userID;
-        localStorage.setItem('roomID',roomID);
-        var searchingForPlayer=document.getElementById("searching-for-player");
-        searchingForPlayer.style="display:none;";
-        console.log('!!!!!!PLAYER'+room);
-        var player1=document.getElementById("player-1-username");
-        var player2=document.getElementById("player-2-username");
-        var player1Mobile=document.getElementById("player-1-username-mobile");
-        var player2Mobile=document.getElementById("player-2-username-mobile");
-        // set players
-        player1.innerHTML=room.player1Username;
-        player2.innerHTML=room.player2Username;
-        player1Mobile.innerHTML=room.player1Username;
-        player2Mobile.innerHTML=room.player2Username;
-
-        socket.emit('choose-turn-prompt-session',{});
-    });
-    
-    socket.on('searching',()=>{
-        var searchingForPlayer=document.getElementById("searching-for-player");
-        searchingForPlayer.innerHTML="Searching For Player ...";
-    });
-
-    socket.on('player-choose-turn-prompt-session',()=>{
-        console.log('choose-prompt-session');
-        $('#exampleModalCenter').modal('show');
-    });
-
-    socket.on('wait-player-choose-turn-prompt-session',()=>{
-        var waitingForPlayer=document.getElementById("wait-for-player");
-        waitingForPlayer.innerHTML="Waiting For Player To Choose Turn ...";
-    });
-
-    socket.on('tictactoe-start',({board,currentTurn,player1Symbol,player2Symbol})=>{
-        var waitingForPlayer=document.getElementById("wait-for-player");
-        waitingForPlayer.innerHTML="";
-        var tttBoardCurrentPlayer=document.getElementById("ttt-board-current-player");
-        var tttBoardCurrentPlayerMobile=document.getElementById("ttt-board-current-player-mobile");
-        tttBoardCurrentPlayer.innerHTML="Current Turn: "+currentTurn;
-        tttBoardCurrentPlayerMobile.innerHTML="Current Turn: "+currentTurn;
-        console.log(board);
-        // 
-        var player1=document.getElementById("player-1-username");
-        var player2=document.getElementById("player-2-username");
-        console.log(player2Symbol+''+player1Symbol);
-        // var player1Mobile=document.getElementById("player-1-username-mobile");
-        // var player2Mobile=document.getElementById("player-2-username-mobile");
-        player1.innerHTML='('+player1Symbol+') '+player1.innerHTML;
-        player2.innerHTML='('+player2Symbol+') '+player2.innerHTML;
-
     });
 </script>
