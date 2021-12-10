@@ -1,19 +1,80 @@
 const { v4: uuidv4 } = require('uuid');
 class BoardGame{
     constructor(){
-        this.board=['','','','','','','','',''];
-    }
-    checkWinner(){
-        
-    }
-    boardFull(){
-
-    }
-    rematch(){
-
+        this.board=[null,null,null,null,null,null,null,null,null];
     }
     setValue(pos,value){
-        // this.board[]
+        this.board[pos]=value;
+    }
+    // check if there is a winner
+    checkWinner(player1Symbol,player2Symbol){
+        // console.log('----- check winner ------');
+        // horizontal win paths
+        if(this.board[0]&&this.board[1]&&this.board[2]&&this.board[0]==this.board[1]&& this.board[0]==this.board[2]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
+            // console.log('winnerh1');
+            return winningPlayer;
+        }
+        else if(this.board[3]&&this.board[4]&&this.board[5]&&this.board[3]==this.board[4]&& this.board[3]==this.board[5]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[3]);
+            // console.log('winnerh2');
+            return winningPlayer;
+        }
+        else if(this.board[6]&&this.board[7]&&this.board[8]&&this.board[6]==this.board[7]&& this.board[6]==this.board[8]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[6]);
+            // console.log('winnerh3');
+            return winningPlayer;
+        }
+        // vertical win paths
+        else if(this.board[0]&&this.board[3]&&this.board[6]&&this.board[0]==this.board[3]&& this.board[0]==this.board[6]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
+            // console.log('winnerv1');
+            return winningPlayer;
+        }
+        else if(this.board[1]&&this.board[4]&&this.board[7]&&this.board[1]==this.board[4]&& this.board[1]==this.board[7]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[1]);
+            // console.log('winnerv2');
+            return winningPlayer;
+        }
+        else if(this.board[2]&&this.board[5]&&this.board[8]&&this.board[2]==this.board[5]&& this.board[2]==this.board[8]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[2]);
+            // console.log('winnerv3');
+            return winningPlayer;
+        }
+        // cross win paths
+        else if(this.board[0]&&this.board[4]&&this.board[8]&&this.board[0]==this.board[4]&& this.board[0]==this.board[8]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
+            // console.log('winnerX1');
+            return winningPlayer;
+        }
+        else if(this.board[2]&&this.board[4]&&this.board[6]&&this.board[2]==this.board[4]&& this.board[2]==this.board[6]){
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,winningSymbol)
+            // console.log('winnerX2');
+            return winningPlayer;
+        }
+        return 'no winner';
+    }
+    boardFull(){
+        if(this.board[0]&&this.board[1]&&this.board[2]&&this.board[3]&&this.board[4]&&this.board[5]&&this.board[6]&&this.board[7]&&this.board[8]){
+            return true;
+        }
+        return false;
+    }
+    rematch(){
+        this.board=[null,null,null,null,null,null,null,null,null];
+    }
+    // helper functions
+    // checks which player won
+    winningPlayer(player1Symbol,player2Symbol,winningSymbol){
+        if(player1Symbol==winningSymbol){
+            return 'player1';
+        }
+        else if(player2Symbol==winningSymbol){
+            return 'player2';
+        }
+    }
+    displayCurrentTictactoeBoard(){
+        console.log(this.board+'::');
     }
 }
 
@@ -142,10 +203,19 @@ class RoomFactory {
         }
         return room;
     }
+    getUserSymbol(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.player1==userID){
+            return room.player1Symbol;
+        }
+        else if(room.player2==userID){
+            return room.player2Symbol;
+        }
+    }
 
     getRoomBoardGame(roomID){
-        const {board}=this.RoomFactory.get(roomID);
-        return board;
+        const room=this.RoomFactory.get(roomID);
+        return room.board;
     }
 
     getRoomPlayer1Username(roomID){

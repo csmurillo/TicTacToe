@@ -12,19 +12,19 @@
         <div id="ttt-board-container">
             <div id="ttt-board">
                 <div class="ttt-row">
-                    <div id='a0' class="ttt-block" onclick="tictactoeBoard('0')"></div>
-                    <div id='a1' class="ttt-block" onclick="tictactoeBoard('1')"></div>
-                    <div id='a2' class="ttt-block" onclick="tictactoeBoard('2')"></div>
+                    <div id='a0' class="ttt-block" onclick="tictactoeBoard(0)"></div>
+                    <div id='a1' class="ttt-block" onclick="tictactoeBoard(1)"></div>
+                    <div id='a2' class="ttt-block" onclick="tictactoeBoard(2)"></div>
                 </div>
                 <div class="ttt-row">
-                    <div id='a3' class="ttt-block" onclick="tictactoeBoard('3')"></div>
-                    <div id='a4' class="ttt-block" onclick="tictactoeBoard('4')"></div>
-                    <div id='a5' class="ttt-block" onclick="tictactoeBoard('5')"></div>
+                    <div id='a3' class="ttt-block" onclick="tictactoeBoard(3)"></div>
+                    <div id='a4' class="ttt-block" onclick="tictactoeBoard(4)"></div>
+                    <div id='a5' class="ttt-block" onclick="tictactoeBoard(5)"></div>
                 </div>
                 <div class="ttt-row">
-                    <div id='a6' class="ttt-block" onclick="tictactoeBoard('6')"></div>
-                    <div id='a7' class="ttt-block" onclick="tictactoeBoard('7')"></div>
-                    <div id='a8' class="ttt-block" onclick="tictactoeBoard('8')"></div>
+                    <div id='a6' class="ttt-block" onclick="tictactoeBoard(6)"></div>
+                    <div id='a7' class="ttt-block" onclick="tictactoeBoard(7)"></div>
+                    <div id='a8' class="ttt-block" onclick="tictactoeBoard(8)"></div>
                 </div>
             </div>
         </div>
@@ -107,7 +107,8 @@
 <script src="../js/room/chooseTurnPromptSession.js"></script>
 <script src="../js/room/setPlayersTurns.js"></script>
 <script src="../js/room/tictactoeStartGame.js"></script>
-<script>
+<script src="../js/room/tictactoeGame.js"></script>
+<!-- <script>
     function tictactoeBoard(markPos){
             var roomID=localStorage.getItem('roomID');
             console.log('markPos:'+markPos+'socketid'+socket.userID);  
@@ -121,4 +122,4 @@
         console.log('board'+board);
         console.log('current-turn'+currentTurn);
     });
-</script>
+</script> -->

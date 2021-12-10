@@ -205,8 +205,12 @@ io.on('connection', (socket) => {
             else if(currentPlayerTurn!=player2){
                 roomFactory.setRoomPlayerTurn(player2,roomID);
             }
+            let currentPlayerSymbol=roomFactory.getUserSymbol(socket.userID,roomID);
+            console.log('symbol is:'+currentPlayerSymbol);
             // update board
-            console.log('player'+socket.userID+'marked this pos'+markPos);
+            let board = roomFactory.getRoomBoardGame(roomID);
+            board.setValue(markPos,currentPlayerSymbol);
+            // console.log(board.displayCurrentTictactoeBoard());
 
             // let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
             io.in(''+roomID).emit('tictactoe-game',{
