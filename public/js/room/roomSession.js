@@ -9,7 +9,7 @@ socket.on('room-details',({roomID,player1Username,player2Username})=>{
     var player2=document.getElementById("player-2-username");
     var player1Mobile=document.getElementById("player-1-username-mobile");
     var player2Mobile=document.getElementById("player-2-username-mobile");
-
+    
     // set players usernames
     player1.innerHTML=player1Username;
     player2.innerHTML=player2Username;

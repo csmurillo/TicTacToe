@@ -72,6 +72,7 @@
 
 <div id="ttt-prompts-containers">
     <div id="ttt-prompts-placeholder">
+        <div id="winner-player-container"></div>
         <div id="searching-for-player-container">
             <div id="searching-for-player"></div>
         </div>
@@ -108,18 +109,3 @@
 <script src="../js/room/setPlayersTurns.js"></script>
 <script src="../js/room/tictactoeStartGame.js"></script>
 <script src="../js/room/tictactoeGame.js"></script>
-<!-- <script>
-    function tictactoeBoard(markPos){
-            var roomID=localStorage.getItem('roomID');
-            console.log('markPos:'+markPos+'socketid'+socket.userID);  
-            socket.emit('tictactoe-game',{
-                markPos,
-                player:socket.userID
-            });   
-    }
-
-    socket.on('tictactoe-game',({board,currentTurn})=>{
-        console.log('board'+board);
-        console.log('current-turn'+currentTurn);
-    });
-</script> -->

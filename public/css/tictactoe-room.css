@@ -1,3 +1,9 @@
+.x-symbol{
+    font-size: 120px;
+}
+.o-symbol{
+    font-size: 90px;
+}
 #ttt-prompts-containers{
     width:100vw; height:100vh;
     position: absolute;
@@ -6,6 +12,18 @@
 #ttt-prompts-placeholder{
     position: relative;
     top:0px;
+}
+#winner-player-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(0, 0, 0);
 }
 #wait-player-choose-turn-prompt-container{
     width:100vw; height: 100vh;
@@ -122,6 +140,7 @@
 #first-turn-btn,#second-turn-btn{
     font-size: 24px;
 }
+
 /* screen transition tictactoe board smaller */
 @media (max-width: 992px) {
     #ttt-board{

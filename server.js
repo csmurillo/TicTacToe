@@ -190,33 +190,55 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('tictactoe-game',({markPos,playerEmitted})=>{
+    socket.on('tictactoe-game',({markPos})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
-        // turn of player
+        // turn of current player
         let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
         // player1 and player2
         let player1=roomFactory.getRoomPlayer1(roomID);
         let player2=roomFactory.getRoomPlayer2(roomID);
         
         if(currentPlayerTurn==socket.userID){
+            // opposite player symbol
+            let oppositePlayerSymbol=null;
+            // set opposite player turn
             if(currentPlayerTurn!=player1){
+                oppositePlayerSymbol=roomFactory.getUserSymbol(player1,roomID);
                 roomFactory.setRoomPlayerTurn(player1,roomID);
             }
             else if(currentPlayerTurn!=player2){
+                oppositePlayerSymbol=roomFactory.getUserSymbol(player1,roomID);
                 roomFactory.setRoomPlayerTurn(player2,roomID);
             }
+
+            // current player symbol
             let currentPlayerSymbol=roomFactory.getUserSymbol(socket.userID,roomID);
-            console.log('symbol is:'+currentPlayerSymbol);
-            // update board
+            // update tictactoeboard based on current player symbol 
             let board = roomFactory.getRoomBoardGame(roomID);
             board.setValue(markPos,currentPlayerSymbol);
+            // debug purpose
             // console.log(board.displayCurrentTictactoeBoard());
-
-            // let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
-            io.in(''+roomID).emit('tictactoe-game',{
-                board:roomFactory.getRoomBoardGame(roomID),
-                currentTurn:roomFactory.getCurrentRoomPlayerUsernameTurn(roomID)
-            });
+            // check if winner
+            let winningPlayer=board.checkWinner(currentPlayerSymbol,oppositePlayerSymbol);
+            if(winningPlayer=='player1'){
+                io.in(''+roomID).emit('game-finished',{
+                    board:roomFactory.getRoomBoardGame(roomID).board,
+                    winner:roomFactory.getRoomPlayer1Username(roomID)
+                });
+            }
+            else if(winningPlayer=='player2'){
+                io.in(''+roomID).emit('game-finished',{
+                    board:roomFactory.getRoomBoardGame(roomID).board,
+                    winner:roomFactory.getRoomPlayer2Username(roomID)
+                });
+            }
+            else{
+                // let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
+                io.in(''+roomID).emit('tictactoe-game',{
+                    board:roomFactory.getRoomBoardGame(roomID).board,
+                    currentTurn:roomFactory.getCurrentRoomPlayerUsernameTurn(roomID)
+                });
+            }   
         }
     });
 

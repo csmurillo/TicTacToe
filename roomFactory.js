@@ -1,9 +1,13 @@
 const { v4: uuidv4 } = require('uuid');
 class BoardGame{
     constructor(){
-        this.board=[null,null,null,null,null,null,null,null,null];
+        this.board=[null,null,null,null,null,null,null,null,null],
+        this.boardWinner=false;
     }
     setValue(pos,value){
+        if(this.boardWinner==true){
+            return;
+        }
         this.board[pos]=value;
     }
     // check if there is a winner
@@ -11,48 +15,56 @@ class BoardGame{
         // console.log('----- check winner ------');
         // horizontal win paths
         if(this.board[0]&&this.board[1]&&this.board[2]&&this.board[0]==this.board[1]&& this.board[0]==this.board[2]){
+            this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
             // console.log('winnerh1');
             return winningPlayer;
         }
         else if(this.board[3]&&this.board[4]&&this.board[5]&&this.board[3]==this.board[4]&& this.board[3]==this.board[5]){
+            this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[3]);
             // console.log('winnerh2');
             return winningPlayer;
         }
         else if(this.board[6]&&this.board[7]&&this.board[8]&&this.board[6]==this.board[7]&& this.board[6]==this.board[8]){
+            this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[6]);
             // console.log('winnerh3');
             return winningPlayer;
         }
         // vertical win paths
         else if(this.board[0]&&this.board[3]&&this.board[6]&&this.board[0]==this.board[3]&& this.board[0]==this.board[6]){
+            this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
             // console.log('winnerv1');
             return winningPlayer;
         }
         else if(this.board[1]&&this.board[4]&&this.board[7]&&this.board[1]==this.board[4]&& this.board[1]==this.board[7]){
+            this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[1]);
             // console.log('winnerv2');
             return winningPlayer;
         }
         else if(this.board[2]&&this.board[5]&&this.board[8]&&this.board[2]==this.board[5]&& this.board[2]==this.board[8]){
+            this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[2]);
             // console.log('winnerv3');
             return winningPlayer;
         }
         // cross win paths
         else if(this.board[0]&&this.board[4]&&this.board[8]&&this.board[0]==this.board[4]&& this.board[0]==this.board[8]){
+            this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
             // console.log('winnerX1');
             return winningPlayer;
         }
         else if(this.board[2]&&this.board[4]&&this.board[6]&&this.board[2]==this.board[4]&& this.board[2]==this.board[6]){
-            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,winningSymbol)
+            this.setBoardWinner();
+            let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[2])
             // console.log('winnerX2');
             return winningPlayer;
         }
-        return 'no winner';
+        return false;
     }
     boardFull(){
         if(this.board[0]&&this.board[1]&&this.board[2]&&this.board[3]&&this.board[4]&&this.board[5]&&this.board[6]&&this.board[7]&&this.board[8]){
@@ -72,6 +84,9 @@ class BoardGame{
         else if(player2Symbol==winningSymbol){
             return 'player2';
         }
+    }
+    setBoardWinner(){
+        this.boardWinner=true;
     }
     displayCurrentTictactoeBoard(){
         console.log(this.board+'::');
