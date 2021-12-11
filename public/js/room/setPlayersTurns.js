@@ -1,6 +1,11 @@
 // first turn user will pick between X or O
 // will send to server socketio on set-players-turns
 function chooseTurnPrompt(turnChoosen){
-    $('#exampleModalCenter').modal('hide');
+    console.log('chooseturnpromt function');
+    // $('#exampleModalCenter').modal('hide');
+    toggleTttPrompts('none');
     socket.emit('set-players-turns',{turnChoosen});
 }
+
+
+

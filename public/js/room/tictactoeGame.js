@@ -24,22 +24,10 @@ socket.on('game-finished',({board,winner})=>{
     updateBoard(board);
     console.log('game!');
     // display winner
-    var winnerPlayerContainer=document.getElementById('winner-player-container');
+    var winnerPlayerContainer=document.getElementById('winner-player');
     winnerPlayerContainer.innerHTML='Winner '+winner;
     // show tictactoeprompt container
     var tttPromptsContainer=document.getElementById("ttt-prompts-containers");
     tttPromptsContainer.style.zIndex="9999";
 });
-function updateBoard(board){
-    for(var i=0; i<board.length;i++){
-        var tttBoardCurrentPlayer=document.getElementById("a"+i);
-        if(board[i]!=null){
-            if(board[i]=='X'){
-                tttBoardCurrentPlayer.innerHTML="<div class='x-symbol center w-100 h-100'><i class='fas fa-times'></i></div>";
-            }
-            else if(board[i]=='O'){
-                tttBoardCurrentPlayer.innerHTML="<div class='o-symbol center w-100 h-100'><i class='far fa-circle'></i></div>";
-            }
-        }
-    }
-}
+

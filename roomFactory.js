@@ -74,6 +74,7 @@ class BoardGame{
     }
     rematch(){
         this.board=[null,null,null,null,null,null,null,null,null];
+        this.boardWinner=false;
     }
     // helper functions
     // checks which player won
@@ -107,9 +108,11 @@ class RoomFactory {
                 player1:null,
                 player1Username:null,
                 player1Symbol:null,
+                player1Rematch:false,
                 player2:null,
                 player2Username:null,
                 player2Symbol:null,
+                player2Rematch:false,
                 playerFirstTurn:null,
                 playerTurn:null,
                 roomInProgress:false,
@@ -117,7 +120,29 @@ class RoomFactory {
             });
         }    
     }
-    
+    getPlayer2Rematch(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player2Rematch;
+    }
+    getPlayer1Rematch(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.player1Rematch;
+    }
+    setPlayerRematch(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        const {player1,player2}=room;
+        if(userID==player1){
+            room.player1Rematch=true;
+        }
+        else if(userID==player2){
+            room.player2Rematch=true;
+        }
+    }
+    clearPlayerRematch(roomID){
+        const room=this.RoomFactory.get(roomID);
+        room.player1Rematch=false;
+        room.player2Rematch=false;
+    }
 
     joinRoom(userID,username){
         let roomJoined=null;
@@ -153,6 +178,17 @@ class RoomFactory {
         const room=this.RoomFactory.get(roomID);
         const {player1,player2,playerFirstTurn}=room;
         if(playerFirstTurn==null){
+            this.RoomFactory.set(roomID,{...room,playerFirstTurn:player1});
+        }
+    }
+
+    updateRoomPlayerFirstTurn(roomID){
+        const room=this.RoomFactory.get(roomID);
+        const {player1,player2,playerFirstTurn}=room;
+        if(playerFirstTurn==player1){
+            this.RoomFactory.set(roomID,{...room,playerFirstTurn:player2});
+        }
+        else if(playerFirstTurn==player2){
             this.RoomFactory.set(roomID,{...room,playerFirstTurn:player1});
         }
     }
@@ -218,6 +254,7 @@ class RoomFactory {
         }
         return room;
     }
+
     getUserSymbol(userID,roomID){
         const room=this.RoomFactory.get(roomID);
         if(room.player1==userID){
@@ -225,6 +262,16 @@ class RoomFactory {
         }
         else if(room.player2==userID){
             return room.player2Symbol;
+        }
+    }
+
+    getUserPlayerPosition(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.player1==userID){
+            return 'player1';
+        }
+        else if(room.player2==userID){
+            return 'player2';
         }
     }
 

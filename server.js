@@ -85,6 +85,9 @@ io.on('connection', (socket) => {
 
     // join session
     socket.on('join-session',()=>{
+        console.log('---------------');
+        console.log(''+socket.username);
+        console.log('---------------');
         const roomID = roomFactory.joinRoom(socket.userID,socket.username);
 
         socket.emit('load-room-session',{
@@ -181,10 +184,12 @@ io.on('connection', (socket) => {
                 roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
             }
         }
-
+        console.log('new board'+roomFactory.getRoomBoardGame(roomID).board);
         io.in(''+roomID).emit('tictactoe-start-game',{
-            board:roomFactory.getRoomBoardGame(roomID),
+            board:roomFactory.getRoomBoardGame(roomID).board,
             currentTurn:roomFactory.getCurrentRoomPlayerUsernameTurn(roomID),
+            player1Username:roomFactory.getRoomPlayer1Username(socket.roomID),
+            player2Username:roomFactory.getRoomPlayer2Username(socket.roomID),
             player1Symbol:roomFactory.getPlayer1Symbol(roomID),
             player2Symbol:roomFactory.getPlayer2Symbol(roomID)
         });
@@ -192,8 +197,10 @@ io.on('connection', (socket) => {
 
     socket.on('tictactoe-game',({markPos})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
+
         // turn of current player
         let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
+
         // player1 and player2
         let player1=roomFactory.getRoomPlayer1(roomID);
         let player2=roomFactory.getRoomPlayer2(roomID);
@@ -207,7 +214,7 @@ io.on('connection', (socket) => {
                 roomFactory.setRoomPlayerTurn(player1,roomID);
             }
             else if(currentPlayerTurn!=player2){
-                oppositePlayerSymbol=roomFactory.getUserSymbol(player1,roomID);
+                oppositePlayerSymbol=roomFactory.getUserSymbol(player2,roomID);
                 roomFactory.setRoomPlayerTurn(player2,roomID);
             }
 
@@ -218,18 +225,37 @@ io.on('connection', (socket) => {
             board.setValue(markPos,currentPlayerSymbol);
             // debug purpose
             // console.log(board.displayCurrentTictactoeBoard());
+            // debug purpose
+            // console.log(currentPlayerSymbol+','+oppositePlayerSymbol);
+            // set winner
+            let winningPlayer;
+            if(roomFactory.getUserPlayerPosition(socket.userID,roomID)=='player1'){
+                winningPlayer=board.checkWinner(currentPlayerSymbol,oppositePlayerSymbol);
+            }
+            else if(roomFactory.getUserPlayerPosition(socket.userID,roomID)=='player2'){
+                winningPlayer=board.checkWinner(oppositePlayerSymbol,currentPlayerSymbol);
+            }
             // check if winner
-            let winningPlayer=board.checkWinner(currentPlayerSymbol,oppositePlayerSymbol);
             if(winningPlayer=='player1'){
+                // console.log('player won is player1'+roomFactory.getRoomPlayer1Username(roomID));
                 io.in(''+roomID).emit('game-finished',{
                     board:roomFactory.getRoomBoardGame(roomID).board,
                     winner:roomFactory.getRoomPlayer1Username(roomID)
                 });
+                // console.log('reachedplayer1'+roomID);
+                io.in(''+roomID).emit('rematch',{
+                    rematch:true
+                });
             }
             else if(winningPlayer=='player2'){
+                // console.log('player won is player2'+roomFactory.getRoomPlayer2Username(roomID));
                 io.in(''+roomID).emit('game-finished',{
                     board:roomFactory.getRoomBoardGame(roomID).board,
                     winner:roomFactory.getRoomPlayer2Username(roomID)
+                });
+                // console.log('reachedplayer2');
+                io.in(''+roomID).emit('rematch',{
+                    rematch:true
                 });
             }
             else{
@@ -242,9 +268,29 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('rematch',()=>{
+    socket.on('rematch',({rematch})=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        roomFactory.setPlayerRematch(socket.userID,roomID);
 
+        let player1RematchResponse=roomFactory.getPlayer1Rematch(roomID);
+        let player2RematchResponse=roomFactory.getPlayer2Rematch(roomID);
+        console.log('player1Res'+player1RematchResponse+'player2Res'+player2RematchResponse);
+        if(player1RematchResponse&&player2RematchResponse){
+            roomFactory.clearPlayerRematch(roomID);
+            roomFactory.updateRoomPlayerFirstTurn(roomID);
+            // clear board
+            let board = roomFactory.getRoomBoardGame(roomID);
+            board.rematch();
+            io.in(''+roomID).emit('start-rematch',{});
+            console.log('both player both player reponsde that they want a rematch indeed');
+        }
+        else{
+            // waiting player will be emitted waiting for other player rematch
+            socket.emit('waiting-for-rematch',{});
+        }  
     });
+
+    socket.on('end-game',()=>{});
 
     socket.on('disconnect',()=>{
         console.log('disconnected!!!');

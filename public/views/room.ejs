@@ -70,9 +70,51 @@
     </div>
 </div>
 
+<style>
+    #winner-player{
+
+    }
+    #rematch-prompt-container{
+        margin-bottom: 20px;
+    }
+    #rematch-prompt{
+        font-size: 24px;
+    }
+    #rematch-true-btn{
+        font-size: 20px;
+        margin-right: 10px;
+    }
+    #rematch-false-btn{
+        font-size: 20px;
+    }
+</style>
+
 <div id="ttt-prompts-containers">
     <div id="ttt-prompts-placeholder">
-        <div id="winner-player-container"></div>
+        <div id="rematch-container">
+            <!-- Modal -->
+            <div class="modal fade" id="rematchModal" tabindex="-1" role="dialog" aria-labelledby="rematchModal" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body center">
+                        <div>
+                            <div id="winner-player-container">
+                                <div id="winner-player">Winner</div>
+                            </div>
+                            <div id="rematch-prompt-container" class="center">
+                                <div id="rematch-prompt">Rematch</div>
+                            </div>
+                            <div id="rematch-btn-container" class="center">
+                                <button id="rematch-true-btn" class="btn btn-primary mr-5" onclick="rematch(true)">Play Again</button>
+                                <button id="rematch-false-btn" class="btn btn-secondary" onclick="rematch(false)">Exit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="winner-player-container"></div> -->
         <div id="searching-for-player-container">
             <div id="searching-for-player"></div>
         </div>
@@ -103,9 +145,67 @@
         </div>
     </div>
 </div>
+<script>
+    
+    function updateBoard(board){
+        for(var i=0; i<board.length;i++){
+            var tttBoardCurrentPlayer=document.getElementById("a"+i);
+            if(board[i]!=null){
+                if(board[i]=='X'){
+                    tttBoardCurrentPlayer.innerHTML="<div class='x-symbol center w-100 h-100'><i class='fas fa-times'></i></div>";
+                }
+                else if(board[i]=='O'){
+                    tttBoardCurrentPlayer.innerHTML="<div class='o-symbol center w-100 h-100'><i class='far fa-circle'></i></div>";
+                }
+            }
+            else{
+                tttBoardCurrentPlayer.innerHTML="";
+            }
+        }
+    }
 
+function toggleTttPrompts(promptToShow){
+    var rematchContainer=document.getElementById('rematch-container');
+    var searchingForPlayerContainer=document.getElementById('searching-for-player-container');
+    var waitPlayerChooseTurnPromptContainer=document.getElementById('wait-player-choose-turn-prompt-container');
+    var playerTurnPromptContainer=document.getElementById('player-turn-prompt-container');
+
+    if(promptToShow=='none'){
+        $('#exampleModalCenter').modal('hide');
+        $('#rematchModal').modal('hide');
+        rematchContainer.style.display="none";
+        searchingForPlayerContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+    }
+    else if(promptToShow=='rematchContainer'){
+        rematchContainer.style.display="flex";
+        $('#rematchModal').modal('show');
+        searchingForPlayerContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+    }
+    else if(promptToShow=='searchingForPlayerContainer'){
+        searchingForPlayerContainer.style.display="flex";
+        rematchContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+    }
+    else if(promptToShow=='playerTurnPromptContainer'){
+        playerTurnPromptContainer.style.display="flex";
+        $('#exampleModalCenter').modal('show');
+        $('#rematchModal').modal('hide');
+        rematchContainer.style.display="none";
+        searchingForPlayerContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+    }
+}
+
+
+</script>
 <script src="../js/room/roomSession.js"></script>
 <script src="../js/room/chooseTurnPromptSession.js"></script>
 <script src="../js/room/setPlayersTurns.js"></script>
 <script src="../js/room/tictactoeStartGame.js"></script>
 <script src="../js/room/tictactoeGame.js"></script>
+<script src="../js/room/rematch.js"></script>
