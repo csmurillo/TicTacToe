@@ -1,6 +1,7 @@
 socket.emit('room-session',{});
 
-socket.on('room-details',({roomID,player1Username,player2Username})=>{
+socket.on('room-details',({roomID,currentPlayer,player1Username,player2Username})=>{
+    console.log('current player is '+currentPlayer);
     // save room to localstorage for page refresh
     localStorage.setItem('roomID',roomID);
     // set initial room details
@@ -30,6 +31,5 @@ socket.on('searching-for-player',()=>{
     var searchingForPlayer=document.getElementById("searching-for-player");
     searchingForPlayer.innerHTML="Searching For Player ...";
 });
-
 
 

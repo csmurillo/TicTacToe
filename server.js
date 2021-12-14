@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
         let roomID=roomFactory.getUserRoomID(socket.userID);
         let playerPos=roomFactory.getPlayerPosition(socket.userID,roomID);
 
-        if(playerPos=='player1'){
+        if(playerPos=='player-1'){
             let player2=roomFactory.getRoomPlayer2(roomID);
             if(turnChoosen=='first'){
                 roomFactory.setRoomPlayerTurn(socket.userID,roomID);
@@ -171,7 +171,7 @@ io.on('connection', (socket) => {
                 roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
             }
         }
-        else if(playerPos=='player2'){
+        else if(playerPos=='player-2'){
             let player1=roomFactory.getRoomPlayer1(roomID);
             if(turnChoosen=='first'){
                 roomFactory.setRoomPlayerTurn(socket.userID,roomID);
@@ -193,6 +193,18 @@ io.on('connection', (socket) => {
             player1Symbol:roomFactory.getPlayer1Symbol(roomID),
             player2Symbol:roomFactory.getPlayer2Symbol(roomID)
         });
+    });
+
+    socket.on('player-info',()=>{
+        console.log('playerinfooooooooooooooooooooooooooo'+socket.userID);
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        // roomFactory.getPlayerUserName(userID,roomID)
+          io.to(socket.id).emit('player-info',{
+              playerPosition:roomFactory.getPlayerPosition(socket.userID,roomID),
+              playerUsername:roomFactory.getPlayerUserName(socket.userID,roomID),
+              playerSymbol:roomFactory.getPlayerSymbol(socket.userID,roomID)
+          });
+
     });
 
     socket.on('tictactoe-game',({markPos})=>{

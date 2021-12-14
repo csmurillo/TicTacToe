@@ -225,6 +225,35 @@ class RoomFactory {
         }
     }
 
+    getPlayerUserName(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.player1==userID){
+            return room.player1Username;
+        }
+        else if(room.player2==userID){
+            return room.player2Username;
+        }
+    }
+
+    getPlayerSymbol(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.player1==userID){
+            return room.player1Symbol;
+        }
+        else if(room.player2==userID){
+            return room.player2Symbol;
+        }
+    }
+    getPlayerPosition(userID,roomID){
+        const room=this.RoomFactory.get(roomID);
+        if(room.player1==userID){
+            return 'player-1';
+        }
+        else if(room.player2==userID){
+            return 'player-2';
+        }
+    }
+
     getUserRoom(userID){
         let room=null;
         for (const [key, value] of this.RoomFactory.entries()) {
@@ -308,17 +337,6 @@ class RoomFactory {
     getPlayer2Symbol(roomID){
         const room=this.RoomFactory.get(roomID);
         return room.player2Symbol;
-    }
-    
-    getPlayerPosition(userID,roomID){
-        const room=this.RoomFactory.get(roomID);
-        const {player1,player2}=room;
-        if(userID==player1){
-            return 'player1';
-        }
-        else if(userID==player2){
-            return 'player2';
-        }
     }
 
     getRoomPlayerFirstTurn(roomID){

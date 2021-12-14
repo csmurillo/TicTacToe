@@ -12,19 +12,19 @@
         <div id="ttt-board-container">
             <div id="ttt-board">
                 <div class="ttt-row">
-                    <div id='a0' class="ttt-block" onclick="tictactoeBoard(0)"></div>
-                    <div id='a1' class="ttt-block" onclick="tictactoeBoard(1)"></div>
-                    <div id='a2' class="ttt-block" onclick="tictactoeBoard(2)"></div>
+                    <div id='block-0' class="ttt-block" onclick="tictactoeBoard(0)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
+                    <div id='block-1' class="ttt-block" onclick="tictactoeBoard(1)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
+                    <div id='block-2' class="ttt-block" onclick="tictactoeBoard(2)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
                 </div>
                 <div class="ttt-row">
-                    <div id='a3' class="ttt-block" onclick="tictactoeBoard(3)"></div>
-                    <div id='a4' class="ttt-block" onclick="tictactoeBoard(4)"></div>
-                    <div id='a5' class="ttt-block" onclick="tictactoeBoard(5)"></div>
+                    <div id='block-3' class="ttt-block" onclick="tictactoeBoard(3)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
+                    <div id='block-4' class="ttt-block" onclick="tictactoeBoard(4)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
+                    <div id='block-5' class="ttt-block" onclick="tictactoeBoard(5)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
                 </div>
                 <div class="ttt-row">
-                    <div id='a6' class="ttt-block" onclick="tictactoeBoard(6)"></div>
-                    <div id='a7' class="ttt-block" onclick="tictactoeBoard(7)"></div>
-                    <div id='a8' class="ttt-block" onclick="tictactoeBoard(8)"></div>
+                    <div id='block-6' class="ttt-block" onclick="tictactoeBoard(6)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
+                    <div id='block-7' class="ttt-block" onclick="tictactoeBoard(7)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
+                    <div id='block-8' class="ttt-block" onclick="tictactoeBoard(8)" onmouseover="tictactoeSymbolOver(event)" onmouseout="tictactoeSymbolOut(event)"></div>
                 </div>
             </div>
         </div>
@@ -146,10 +146,40 @@
     </div>
 </div>
 <script>
+    function tictactoeSymbolOver(event){
+        // event.target.innerHTML="j";
+        // console.log(event.target.className);
+        // console.log('----------------------');
+        // console.log(event.target.innerHTML);
+        // console.log(event.target);
+        if(event.target.className=='ttt-block'){
+            console.log('ttt-block');
+            var {playerSymbol}=JSON.parse(localStorage.getItem('player-info'));
+            // console.log('player');
+            event.target.style.zIndex="9999";
+            // event.target.style="z-index:9999";
+            if(playerSymbol=='O'){
+                event.target.innerHTML="<div class='temp-symbol o-symbol center w-100 h-100' style='z-index:-2;'><i class='far fa-circle' style='z-index:-2;'></i></div>";
+            }
+            else if(playerSymbol=='X'){
+                event.target.innerHTML="<div class='temp-symbol x-symbol center w-100 h-100' style='z-index:-2;'><i class='fas fa-times' style='z-index:-2;'></i></div>";
+            }
+        }
+        // <div class='tempSymbol x-symbol center w-100 h-100'><i class='fas fa-times'></i></div>
+    }
+    function tictactoeSymbolOut(){
+        if(event.target.className=='temp-symbol x-symbol center w-100 h-100'){
+            event.target.remove();
+        }
+        else if(event.target.className=='temp-symbol o-symbol center w-100 h-100'){
+            event.target.remove();
+        }
+    }
     
     function updateBoard(board){
         for(var i=0; i<board.length;i++){
-            var tttBoardCurrentPlayer=document.getElementById("a"+i);
+            console.log(board[i]);
+            var tttBoardCurrentPlayer=document.getElementById("block-"+i);
             if(board[i]!=null){
                 if(board[i]=='X'){
                     tttBoardCurrentPlayer.innerHTML="<div class='x-symbol center w-100 h-100'><i class='fas fa-times'></i></div>";
