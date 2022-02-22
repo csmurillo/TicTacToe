@@ -120,6 +120,15 @@ class RoomFactory {
             });
         }    
     }
+    roomExist(roomID){
+        const room = this.RoomFactory.get(roomID);
+        // console.log(this.RoomFactory.get(roomID));
+        // console.log('!~~!~~!~~!~~!~~!~~!~~!~~!~~!~~!~~!');
+        if(room==undefined){
+            return false;
+        }
+        return true;
+    }
     getPlayer2Rematch(roomID){
         const room=this.RoomFactory.get(roomID);
         return room.player2Rematch;

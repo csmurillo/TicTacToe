@@ -14,31 +14,37 @@ const isAuthenticated=(sessionStorage)=>{
     };
 };
 
-const existentRoom = (sessionStorage) => {
+const existentRoom = (roomFactory) => {
     return (req,res,next)=>{
-        console.log('inside existent room');
-        const sessionID=req.cookies.sessionID;
-        const session=sessionStorage.getSession(sessionID);
-        console.log(session+'what is this');
-        if(session){
-            const room = session.room;
-            req.room=room;
-            console.log('has something'+room);
+        const existentRoom=roomFactory.roomExist(req.cookies.roomID);
+
+        if(!existentRoom){
+            // false room does not exist
+            req.existentRoom=existentRoom;
+            next();
         }
-        next();
+        else{
+            // room exist
+            req.existentRoom=existentRoom;
+            next();
+        }
     };
 };
 
 const redirect=(req,res,next)=>{
     const url=req.originalUrl;
-    if(req.isAuth && url=='/'){
-        res.redirect('http://localhost:3000/'+req.room);
+    if(url=='/' && req.isAuth && req.existentRoom==true){
+        res.redirect('http://localhost:3000/'+req.cookies.roomID);
     }
-    else if(!req.isAuth && url!='/') {
+    else if(url!='/' && !req.isAuth){
         res.redirect('http://localhost:3000/');
     }
     else{
         next();
     }
 }
+
 module.exports={isAuthenticated,redirect,existentRoom}
+
+
+

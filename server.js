@@ -28,13 +28,12 @@ app.set('views', './public/views');
 app.set('view engine','ejs');
 
 const {isAuthenticated,redirect,existentRoom} = require('./middleware/verify-auth');
-
 // set routes
-app.get('',isAuthenticated(sessionStorage),existentRoom(sessionStorage),redirect,(req,res)=>{
+app.get('',isAuthenticated(sessionStorage),existentRoom(roomFactory),redirect,(req,res)=>{
     res.render('index.ejs');
 });
 
-app.get('/:roomID',isAuthenticated(sessionStorage),redirect,(req,res)=>{
+app.get('/:roomID',isAuthenticated(sessionStorage),existentRoom(roomFactory),redirect,(req,res)=>{
     res.render('room.ejs');
 });
 
@@ -302,7 +301,9 @@ io.on('connection', (socket) => {
         }  
     });
 
-    socket.on('end-game',()=>{});
+    socket.on('end-game',()=>{
+
+    });
 
     socket.on('disconnect',()=>{
         console.log('disconnected!!!');
@@ -322,6 +323,8 @@ io.on('connection', (socket) => {
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
+
+
 
 
 

@@ -29,6 +29,8 @@
         socket.auth={ sessionID };
         localStorage.setItem('sessionID',sessionID);
         document.cookie='sessionID='+sessionID;
+        localStorage.setItem('roomID',roomID);
+        document.cookie='roomID='+roomID;
         socket.userID={ userID };
         socket.username={ username };
 
