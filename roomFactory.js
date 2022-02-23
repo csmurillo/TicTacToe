@@ -120,6 +120,8 @@ class RoomFactory {
             });
         }    
     }
+    
+    // isRoomEmpty
     roomExist(roomID){
         const room = this.RoomFactory.get(roomID);
         // console.log(this.RoomFactory.get(roomID));
@@ -136,6 +138,16 @@ class RoomFactory {
     getPlayer1Rematch(roomID){
         const room=this.RoomFactory.get(roomID);
         return room.player1Rematch;
+    }
+    getOpponent(userID,roomID){
+        const room = this.RoomFactory.get(roomID);
+        const {player1,player2}=room;
+        if(userID!=player1){
+            return player1;
+        }
+        else if(userID!=player2){
+            return player2;
+        }
     }
     setPlayerRematch(userID,roomID){
         const room=this.RoomFactory.get(roomID);
@@ -156,16 +168,18 @@ class RoomFactory {
     joinRoom(userID,username){
         let roomJoined=null;
         for (const [key, value] of this.RoomFactory.entries()) {
-            if(value.player1==null){
-                this.RoomFactory.set(key,{...value, player1:userID,player1Username:username});
-                roomJoined=key;
-                break;
-            }
-            else if(value.player2==null){
-                this.RoomFactory.set(key,{...value, player2:userID,player2Username:username});
-                roomJoined=key;
-                break;
-            }
+            // if(value.roomInProgress==null){
+                if(value.player1==null){
+                    this.RoomFactory.set(key,{...value, player1:userID,player1Username:username});
+                    roomJoined=key;
+                    break;
+                }
+                else if(value.player2==null){
+                    this.RoomFactory.set(key,{...value, player2:userID,player2Username:username});
+                    roomJoined=key;
+                    break;
+                }
+            // }
         }
         return roomJoined;
     }
@@ -185,7 +199,7 @@ class RoomFactory {
 
     setRoomPlayerFirstTurn(roomID){
         const room=this.RoomFactory.get(roomID);
-        const {player1,player2,playerFirstTurn}=room;
+        const {player1,playerFirstTurn}=room;
         if(playerFirstTurn==null){
             this.RoomFactory.set(roomID,{...room,playerFirstTurn:player1});
         }
@@ -207,12 +221,9 @@ class RoomFactory {
         this.RoomFactory.set(roomID,{...room,playerTurn:userID});
     }
 
-    setRoomInProgress(roomID){
+    setRoomInProgress(roomID,roomCondition){
         const room=this.RoomFactory.get(roomID);
-        const {player1,player2}=room;
-        if(player1!=null&&player2!=null){
-            this.RoomFactory.set(roomID,{...room,roomInProgress:true});
-        }
+        this.RoomFactory.set(roomID,{...room,roomInProgress:roomCondition});
     }
     
     setPlayerSymbol(userID,playerSymbol,roomID){
@@ -243,7 +254,7 @@ class RoomFactory {
             return room.player2Username;
         }
     }
-
+// ---
     getPlayerSymbol(userID,roomID){
         const room=this.RoomFactory.get(roomID);
         if(room.player1==userID){

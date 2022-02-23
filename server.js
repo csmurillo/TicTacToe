@@ -37,16 +37,10 @@ app.get('/:roomID',isAuthenticated(sessionStorage),existentRoom(roomFactory),red
     res.render('room.ejs');
 });
 
-// app.get('/other',isAuthenticated(sessionStorage),redirect,(req,res)=>{
-//     res.render('other.ejs');
-// });
-
 // set socketio middleware
 io.use((socket, next) => {
-    console.log('middleware');
     const sessionID = socket.handshake.auth.session;
     if (sessionID) {
-        console.log('exist');
         // check for existing session
         const session = sessionStorage.getSession(sessionID);
         if (session) {
@@ -64,7 +58,6 @@ io.use((socket, next) => {
     socket.sessionID = uuidv4();
     socket.userID = uuidv4();
     socket.username = username;
-    
     next();
 });
 
@@ -302,21 +295,38 @@ io.on('connection', (socket) => {
     });
 
     socket.on('end-game',()=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        // roomFactory.clearRoom(roomID);
+        sessionStorage.removeSession(socket.sessionID);
+        socket.emit('redirect-home',{});
+        // io.in(''+roomID).emit('redirect-home',{});
+        roomFactory.setRoomInProgress(roomID,false);
+        socket.to(''+roomID).emit('end-game-redirect-opponent-home',{});
+        console.log('opppositeopppositeopppositeoppposite');
+    });
 
+    socket.on('clear-game',()=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        roomFactory.clearRoom(roomID);
+        sessionStorage.removeSession(socket.sessionID);
     });
 
     socket.on('disconnect',()=>{
-        console.log('disconnected!!!');
-        // save session
-        sessionStorage.saveSession(
-            socket.sessionID,
-            {
-                userID:socket.userID,
-                username:socket.username,
-                room:roomFactory.getUserRoom(socket.userID),
-                connected:false
-            }
-        );
+        const sessionValid=sessionStorage.sessionExist(socket.sessionID);
+        if(sessionValid){
+            console.log('disconnected!!!');
+            console.log('connected false!@#!@#');
+            // save session
+            sessionStorage.saveSession(
+                socket.sessionID,
+                {
+                    userID:socket.userID,
+                    username:socket.username,
+                    room:roomFactory.getUserRoom(socket.userID),
+                    connected:false
+                }
+            );
+        }
     });
 });
 

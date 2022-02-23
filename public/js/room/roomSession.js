@@ -32,4 +32,13 @@ socket.on('searching-for-player',()=>{
     searchingForPlayer.innerHTML="Searching For Player ...";
 });
 
+socket.on('redirect-home',()=>{
+    window.location.href = '/';
+});
 
+socket.on('end-game-redirect-opponent-home',()=>{
+    console.log('oppponent decined rematch');
+    alert('opponent decinded rematch');
+    socket.emit('clear-game',{});
+    window.location.href = '/';
+});
