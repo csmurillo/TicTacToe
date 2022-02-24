@@ -23,7 +23,7 @@
             // reconnection
             function load(){
                 console.log('load'+window.location.pathname);
-                const session= localStorage.getItem('sessionID');
+                const session= localStorage.getItem('tttSessionID');
                 console.log(session);
                 if(session){
                     socket.auth={session}

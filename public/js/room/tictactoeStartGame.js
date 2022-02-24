@@ -1,6 +1,6 @@
 socket.on('tictactoe-start-game',({board,currentTurn,player1Username,player2Username,player1Symbol,player2Symbol})=>{
     // save board to local storage for use during tictactoe game session
-    localStorage.setItem('ttt-board',board);
+    localStorage.setItem('tttBoard',board);
     updateBoard(board);
     // remove message prompts from screen
     // remove prompt containers
@@ -37,7 +37,7 @@ socket.on('player-info',(playerInfo)=>{
     const { playerPosition, playerUsername, playerSymbol }=playerInfo;
     console.log(playerPosition+'playerPosiition');
     // save current player info
-    localStorage.setItem('player-info',JSON.stringify(playerInfo));
+    localStorage.setItem('tttPlayerInfo',JSON.stringify(playerInfo));
     var playerUsername1=document.getElementById(playerPosition+"-username");
     playerUsername1.style.textDecoration="underline";
     // playerUsername.style="text-decoration: underline;";

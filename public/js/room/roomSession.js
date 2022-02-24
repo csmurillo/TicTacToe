@@ -3,7 +3,7 @@ socket.emit('room-session',{});
 socket.on('room-details',({roomID,currentPlayer,player1Username,player2Username})=>{
     console.log('current player is '+currentPlayer);
     // save room to localstorage for page refresh
-    localStorage.setItem('roomID',roomID);
+    localStorage.setItem('tttRoomID',roomID);
     // set initial room details
     // usernames
     var player1=document.getElementById("player-1-username");
@@ -25,25 +25,23 @@ socket.on('room-details',({roomID,currentPlayer,player1Username,player2Username}
     // will display prompt to specified user
     socket.emit('choose-turn-prompt-session',{});
 });
-
 socket.on('searching-for-player',()=>{
     // adds searching for player message to screen
     var searchingForPlayer=document.getElementById("searching-for-player");
     searchingForPlayer.innerHTML="Searching For Player ...";
 });
-
 socket.on('end-game-redirect-home',()=>{
     deleteCookies();
+    deleteLocalStorageTicTacToeItems();
     window.location.href = '/';
 });
-
 socket.on('end-game-redirect-opponent-home',()=>{
     deleteCookies();
+    deleteLocalStorageTicTacToeItems();
     socket.emit('clear-game',{});
     toggleTttPrompts('playerDeclinedRematchContainer');
-    let timer=setTimer();
+    setTimer();
 });
-
 function setTimer(){
     return setTimeout(()=>{
         let secondsLeft=parseInt(document.getElementById('second-to-redirect').innerHTML);
@@ -57,8 +55,13 @@ function setTimer(){
         }
     },1000);
 }
-
 function deleteCookies(){
-    document.cookie = "sessionID=;expires=" + new Date(0).toUTCString();
-    document.cookie = "roomID=;expires=" + new Date(0).toUTCString();
+    document.cookie = "tttSessionID=;expires=" + new Date(0).toUTCString();
+    document.cookie = "tttRoomID=;expires=" + new Date(0).toUTCString();
+}
+function deleteLocalStorageTicTacToeItems(){
+    localStorage.removeItem('tttPlayerInfo');
+    localStorage.removeItem('tttSessionID');
+    localStorage.removeItem('tttRoomID');
+    localStorage.removeItem('tttBoard');
 }

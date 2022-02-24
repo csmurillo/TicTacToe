@@ -27,10 +27,10 @@
     });
     socket.on('load-room-session',({sessionID,userID,username,roomID})=>{
         socket.auth={ sessionID };
-        localStorage.setItem('sessionID',sessionID);
-        document.cookie='sessionID='+sessionID;
-        localStorage.setItem('roomID',roomID);
-        document.cookie='roomID='+roomID;
+        localStorage.setItem('tttSessionID',sessionID);
+        document.cookie='tttSessionID='+sessionID;
+        localStorage.setItem('tttRoomID',roomID);
+        document.cookie='tttRoomID='+roomID;
         socket.userID={ userID };
         socket.username={ username };
 

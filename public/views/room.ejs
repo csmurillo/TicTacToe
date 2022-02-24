@@ -165,7 +165,7 @@
     function tictactoeSymbolOver(event){
         if(event.target.className=='ttt-block'){
             console.log('ttt-block');
-            var {playerSymbol}=JSON.parse(localStorage.getItem('player-info'));
+            var {playerSymbol}=JSON.parse(localStorage.getItem('tttPlayerInfo'));
             // console.log('player');
             event.target.style.zIndex="9999";
             // event.target.style="z-index:9999";
