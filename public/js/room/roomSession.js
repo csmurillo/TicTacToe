@@ -37,8 +37,21 @@ socket.on('redirect-home',()=>{
 });
 
 socket.on('end-game-redirect-opponent-home',()=>{
-    console.log('oppponent decined rematch');
-    alert('opponent decinded rematch');
     socket.emit('clear-game',{});
-    window.location.href = '/';
+    toggleTttPrompts('playerDeclinedRematchContainer');
+    let timer=setTimer();
 });
+
+function setTimer(){
+    return setTimeout(()=>{
+        let secondsLeft=parseInt(document.getElementById('second-to-redirect').innerHTML);
+        if(secondsLeft>0){
+            secondsLeft--;
+            document.getElementById('second-to-redirect').innerHTML=''+secondsLeft;
+            setTimer();
+        }
+        if(secondsLeft==0){
+            window.location.href = '/';
+        }
+    },1000);
+}

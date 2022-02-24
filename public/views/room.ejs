@@ -114,7 +114,20 @@
                 </div>
             </div>
         </div>
-        <!-- <div id="winner-player-container"></div> -->
+        <div id="player-declined-rematch-container">
+            <div id="player-declined-rematch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="rematchModal" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body center">
+                            <div>
+                                <h1 id="player-declined-rematch-title" class="center">Player Declined Rematch</h1>
+                                <div id="player-redirect">Redirecting in <span id="second-to-redirect">5</span> seconds</div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </div>
         <div id="searching-for-player-container">
             <div id="searching-for-player"></div>
         </div>
@@ -191,6 +204,7 @@
 
 function toggleTttPrompts(promptToShow){
     var rematchContainer=document.getElementById('rematch-container');
+    var playerDeclinedRematchContainer=document.getElementById('player-declined-rematch-container');
     var searchingForPlayerContainer=document.getElementById('searching-for-player-container');
     var waitPlayerChooseTurnPromptContainer=document.getElementById('wait-player-choose-turn-prompt-container');
     var playerTurnPromptContainer=document.getElementById('player-turn-prompt-container');
@@ -198,8 +212,27 @@ function toggleTttPrompts(promptToShow){
     if(promptToShow=='none'){
         $('#exampleModalCenter').modal('hide');
         $('#rematchModal').modal('hide');
+        $('#player-declined-rematch-container').modal('hide');
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
+    }
+    else if(promptToShow=='waitPlayerChooseTurnPromptContainer'){
+        waitPlayerChooseTurnPromptContainer.style.display="flex";
+        $('#exampleModalCenter').modal('hide');
+        $('#rematchModal').modal('hide');
+        rematchContainer.style.display="none";
+        searchingForPlayerContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
+    }
+    else if(promptToShow=='playerDeclinedRematchContainer'){
+        playerDeclinedRematchContainer.style.display="flex";
+        $('#player-declined-rematch').modal('show');
+        searchingForPlayerContainer.style.display="none";
+        rematchContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
     }
@@ -209,12 +242,14 @@ function toggleTttPrompts(promptToShow){
         searchingForPlayerContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
     }
     else if(promptToShow=='searchingForPlayerContainer'){
         searchingForPlayerContainer.style.display="flex";
         rematchContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
     }
     else if(promptToShow=='playerTurnPromptContainer'){
         playerTurnPromptContainer.style.display="flex";
@@ -223,6 +258,7 @@ function toggleTttPrompts(promptToShow){
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
     }
 }
 
