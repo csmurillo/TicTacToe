@@ -298,7 +298,7 @@ io.on('connection', (socket) => {
         let roomID=roomFactory.getUserRoomID(socket.userID);
         // roomFactory.clearRoom(roomID);
         sessionStorage.removeSession(socket.sessionID);
-        socket.emit('redirect-home',{});
+        socket.emit('end-game-redirect-home',{});
         // io.in(''+roomID).emit('redirect-home',{});
         roomFactory.setRoomInProgress(roomID,false);
         socket.to(''+roomID).emit('end-game-redirect-opponent-home',{});

@@ -32,11 +32,13 @@ socket.on('searching-for-player',()=>{
     searchingForPlayer.innerHTML="Searching For Player ...";
 });
 
-socket.on('redirect-home',()=>{
+socket.on('end-game-redirect-home',()=>{
+    deleteCookies();
     window.location.href = '/';
 });
 
 socket.on('end-game-redirect-opponent-home',()=>{
+    deleteCookies();
     socket.emit('clear-game',{});
     toggleTttPrompts('playerDeclinedRematchContainer');
     let timer=setTimer();
@@ -54,4 +56,9 @@ function setTimer(){
             window.location.href = '/';
         }
     },1000);
+}
+
+function deleteCookies(){
+    document.cookie = "sessionID=;expires=" + new Date(0).toUTCString();
+    document.cookie = "roomID=;expires=" + new Date(0).toUTCString();
 }
