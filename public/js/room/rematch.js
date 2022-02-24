@@ -13,6 +13,11 @@ socket.on('start-rematch',()=>{
     // will display prompt to specified user
     socket.emit('choose-turn-prompt-session',{});
 });
+socket.on('waiting-for-rematch',()=>{
+    toggleTttPrompts('waitPlayerChooseTurnPromptContainer');
+    var waitingForPlayer=document.getElementById("wait-for-player");
+    waitingForPlayer.innerHTML="Waiting For Player ...";
+});
 function rematch(answer){
     if(answer){
         socket.emit('rematch',{});
