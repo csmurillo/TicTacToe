@@ -164,7 +164,42 @@
 #first-turn-btn,#second-turn-btn{
     font-size: 24px;
 }
-
+/* win markers style */
+.win-container{
+    display: flex;
+    margin-top: 5px;
+}
+.win-mr{
+    margin-right: 5px;
+}
+.player-1-active-win{
+    background-color: rgb(9, 255, 0);
+}
+.player-2-active-win{
+    background-color: blue;
+}
+.player-1-wins{
+    border-radius: 50%;
+    border:2px solid rgb(9, 255, 0);
+}
+.player-2-wins{
+    border-radius: 50%;
+    border:2px solid blue;
+}
+.win-size{
+    width: 15px; height: 15px;
+}
+.win-mobile-size{
+    width: 20px; height: 20px;
+}
+@media (max-width: 676px) {
+    .player-1-wins{
+        border:3px solid rgb(9,255,0);
+    }
+    .player-2-wins{
+        border:3px solid blue;
+    }
+}
 /* screen transition tictactoe board smaller */
 @media (max-width: 992px) {
     #ttt-board{
@@ -205,22 +240,22 @@
         outline: 1px solid white;
     }
     #player-1-container-mobile{
-        width: 100%; height: 60%;
+        width: 100%; height: 45%;
         color:white;
         font-size: 54px;
     }
     #player-1-username-container-mobile{
-        width: 100%; height: 40%;
+        width: 100%; height: 55%;
         color:lightgreen;
         font-size: 20px;
     }
     #player-2-container-mobile{
-        width: 100%; height: 60%;
+        width: 100%; height: 45%;
         color:white;
         font-size: 54px;
     }
     #player-2-username-container-mobile{
-        width: 100%; height: 40%;
+        width: 100%; height: 55%;
         color:blue;
         font-size: 20px;
     }
