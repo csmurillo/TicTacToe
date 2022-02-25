@@ -10,6 +10,14 @@ class BoardGame{
         }
         this.board[pos]=value;
     }
+    validBoardPosition(pos){
+        if(this.board[pos]==null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     // check if there is a winner
     checkWinner(player1Symbol,player2Symbol){
         // console.log('----- check winner ------');

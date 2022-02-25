@@ -204,34 +204,37 @@ io.on('connection', (socket) => {
 
         // turn of current player
         let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
+        // current player symbol
+        let currentPlayerSymbol=roomFactory.getUserSymbol(socket.userID,roomID);
 
         // player1 and player2
         let player1=roomFactory.getRoomPlayer1(roomID);
         let player2=roomFactory.getRoomPlayer2(roomID);
-        
+
         if(currentPlayerTurn==socket.userID){
             // opposite player symbol
             let oppositePlayerSymbol=null;
-            // set opposite player turn
-            if(currentPlayerTurn!=player1){
-                oppositePlayerSymbol=roomFactory.getUserSymbol(player1,roomID);
-                roomFactory.setRoomPlayerTurn(player1,roomID);
+            // check if board value is valid
+            let board = roomFactory.getRoomBoardGame(roomID);
+            const validPos = board.validBoardPosition(markPos);
+            if(validPos){
+                // set opposite player turn and symbol
+                if(currentPlayerTurn!=player1){
+                    oppositePlayerSymbol=roomFactory.getUserSymbol(player1,roomID);
+                    roomFactory.setRoomPlayerTurn(player1,roomID);
+                }
+                else if(currentPlayerTurn!=player2){
+                    oppositePlayerSymbol=roomFactory.getUserSymbol(player2,roomID);
+                    roomFactory.setRoomPlayerTurn(player2,roomID);
+                }
+                board.setValue(markPos,currentPlayerSymbol);
             }
-            else if(currentPlayerTurn!=player2){
-                oppositePlayerSymbol=roomFactory.getUserSymbol(player2,roomID);
-                roomFactory.setRoomPlayerTurn(player2,roomID);
+            else{
+                // set opposite player symbol
+                oppositePlayerSymbol=roomFactory.getUserSymbol(currentPlayerTurn,roomID);
             }
 
-            // current player symbol
-            let currentPlayerSymbol=roomFactory.getUserSymbol(socket.userID,roomID);
-            // update tictactoeboard based on current player symbol 
-            let board = roomFactory.getRoomBoardGame(roomID);
-            board.setValue(markPos,currentPlayerSymbol);
-            // debug purpose
-            // console.log(board.displayCurrentTictactoeBoard());
-            // debug purpose
-            // console.log(currentPlayerSymbol+','+oppositePlayerSymbol);
-            // set winner
+            // set winner if there is winner
             let winningPlayer;
             if(roomFactory.getUserPlayerPosition(socket.userID,roomID)=='player1'){
                 winningPlayer=board.checkWinner(currentPlayerSymbol,oppositePlayerSymbol);
@@ -239,6 +242,7 @@ io.on('connection', (socket) => {
             else if(roomFactory.getUserPlayerPosition(socket.userID,roomID)=='player2'){
                 winningPlayer=board.checkWinner(oppositePlayerSymbol,currentPlayerSymbol);
             }
+
             // check if winner
             if(winningPlayer=='player1'){
                 // console.log('player won is player1'+roomFactory.getRoomPlayer1Username(roomID));
@@ -262,8 +266,8 @@ io.on('connection', (socket) => {
                     rematch:true
                 });
             }
+            // no winner keep tictactoe game active
             else{
-                // let currentPlayerTurn=roomFactory.getCurrentRoomPlayerTurn(roomID);
                 io.in(''+roomID).emit('tictactoe-game',{
                     board:roomFactory.getRoomBoardGame(roomID).board,
                     currentTurn:roomFactory.getCurrentRoomPlayerUsernameTurn(roomID)
