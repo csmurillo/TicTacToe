@@ -62,3 +62,8 @@ function deleteLocalStorageTicTacToeItems(){
     localStorage.removeItem('tttBoard');
 }
 
+// new
+socket.on('game-end',({gameEnd,winner})=>{
+    console.log('game-end!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    console.log('game-end'+gameEnd);
+});

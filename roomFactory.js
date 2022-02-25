@@ -3,6 +3,14 @@ class BoardGame{
     constructor(){
         this.board=[null,null,null,null,null,null,null,null,null],
         this.boardWinner=false;
+        this.player1Wins=0;
+        this.player2Wins=0;
+    }
+    getPlayer1Wins(){
+        return this.player1Wins;
+    }
+    getPlayer2Wins(){
+        return this.player2Wins;
     }
     setValue(pos,value){
         if(this.boardWinner==true){
@@ -16,6 +24,14 @@ class BoardGame{
         }
         else{
             return false;
+        }
+    }
+    checkFinalWinner(){
+        if(this.player1Wins==2){
+            return 'player1';
+        }
+        else if(this.player2Wins==2){
+            return 'player2';
         }
     }
     // check if there is a winner
@@ -88,9 +104,11 @@ class BoardGame{
     // checks which player won
     winningPlayer(player1Symbol,player2Symbol,winningSymbol){
         if(player1Symbol==winningSymbol){
+            this.player1Wins++;
             return 'player1';
         }
         else if(player2Symbol==winningSymbol){
+            this.player2Wins++;
             return 'player2';
         }
     }

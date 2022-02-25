@@ -233,7 +233,7 @@ io.on('connection', (socket) => {
                 // set opposite player symbol
                 oppositePlayerSymbol=roomFactory.getUserSymbol(currentPlayerTurn,roomID);
             }
-
+    
             // set winner if there is winner
             let winningPlayer;
             if(roomFactory.getUserPlayerPosition(socket.userID,roomID)=='player1'){
@@ -243,28 +243,61 @@ io.on('connection', (socket) => {
                 winningPlayer=board.checkWinner(oppositePlayerSymbol,currentPlayerSymbol);
             }
 
+            // **************************************************
+            // set final winner if there is a final winner
+            let finalWinningPlayer=false;
+            if(board.checkFinalWinner()=='player1'){
+                finalWinningPlayer=true;
+            }
+            else if(board.checkFinalWinner()=='player2'){
+                finalWinningPlayer=true;
+            }
+            // **************************************************
             // check if winner
             if(winningPlayer=='player1'){
                 // console.log('player won is player1'+roomFactory.getRoomPlayer1Username(roomID));
                 io.in(''+roomID).emit('game-finished',{
                     board:roomFactory.getRoomBoardGame(roomID).board,
-                    winner:roomFactory.getRoomPlayer1Username(roomID)
+                    winner:roomFactory.getRoomPlayer1Username(roomID),
+                    player1Wins:board.getPlayer1Wins(),
+                    player2Wins:board.getPlayer2Wins()
                 });
-                // console.log('reachedplayer1'+roomID);
-                io.in(''+roomID).emit('rematch',{
-                    rematch:true
-                });
+                // check if final winner: end game
+                if(finalWinningPlayer){
+                    io.in(''+roomID).emit('game-end',{
+                        gameEnd:true,
+                        winner:roomFactory.getRoomPlayer1Username(roomID)
+                    });
+                }
+                else{
+                    // console.log('reachedplayer1'+roomID);
+                    io.in(''+roomID).emit('rematch',{
+                        rematch:true
+                    });
+                }
             }
             else if(winningPlayer=='player2'){
                 // console.log('player won is player2'+roomFactory.getRoomPlayer2Username(roomID));
                 io.in(''+roomID).emit('game-finished',{
                     board:roomFactory.getRoomBoardGame(roomID).board,
-                    winner:roomFactory.getRoomPlayer2Username(roomID)
+                    winner:roomFactory.getRoomPlayer2Username(roomID),
+                    player1Wins:board.getPlayer1Wins(),
+                    player2Wins:board.getPlayer2Wins()
                 });
                 // console.log('reachedplayer2');
-                io.in(''+roomID).emit('rematch',{
-                    rematch:true
-                });
+                // check if final winner: end game
+                if(finalWinningPlayer){
+                    io.in(''+roomID).emit('game-end',{
+                        gameEnd:true,
+                        winner:roomFactory.getRoomPlayer2Username(roomID)
+                    });
+                }
+                else{
+                    // console.log('reachedplayer1'+roomID);
+                    io.in(''+roomID).emit('rematch',{
+                        rematch:true
+                    });
+                }
             }
             // no winner keep tictactoe game active
             else{
@@ -272,7 +305,7 @@ io.on('connection', (socket) => {
                     board:roomFactory.getRoomBoardGame(roomID).board,
                     currentTurn:roomFactory.getCurrentRoomPlayerUsernameTurn(roomID)
                 });
-            }   
+            } 
         }
     });
 
