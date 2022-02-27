@@ -153,8 +153,25 @@
                     </div>
             </div>
         </div>
-        <div id="waiting">
-
+        <div id="set-winner-container">
+            <div id="setWinnerModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="rematchModal" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div id="set-winner-content" class="center">
+                                <div>
+                                    <div class="mb-4">
+                                        <h1 id="set-winner-title" class="center"></h1>
+                                    </div>
+                                    <div class="center">
+                                        <button id="back-home">Back Home</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
         </div>
         <div id="searching-for-player-container">
             <div id="searching-for-player"></div>
@@ -231,6 +248,7 @@
     }
 
 function toggleTttPrompts(promptToShow){
+    var setWinnerContainer=document.getElementById('set-winner-container');
     var rematchContainer=document.getElementById('rematch-container');
     var playerDeclinedRematchContainer=document.getElementById('player-declined-rematch-container');
     var searchingForPlayerContainer=document.getElementById('searching-for-player-container');
@@ -238,6 +256,19 @@ function toggleTttPrompts(promptToShow){
     var playerTurnPromptContainer=document.getElementById('player-turn-prompt-container');
 
     if(promptToShow=='none'){
+        $('#exampleModalCenter').modal('hide');
+        $('#rematchModal').modal('hide');
+        $('#player-declined-rematch-container').modal('hide');
+        setWinnerContainer.style.display="none";
+        rematchContainer.style.display="none";
+        searchingForPlayerContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
+    }
+    else if(promptToShow=='setWinnerContainer'){
+        setWinnerContainer.style.display="flex";
+        $('#setWinnerModal').modal('show');
         $('#exampleModalCenter').modal('hide');
         $('#rematchModal').modal('hide');
         $('#player-declined-rematch-container').modal('hide');
@@ -251,6 +282,7 @@ function toggleTttPrompts(promptToShow){
         waitPlayerChooseTurnPromptContainer.style.display="flex";
         $('#exampleModalCenter').modal('hide');
         $('#rematchModal').modal('hide');
+        setWinnerContainer.style.display="none";
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
@@ -259,6 +291,7 @@ function toggleTttPrompts(promptToShow){
     else if(promptToShow=='playerDeclinedRematchContainer'){
         playerDeclinedRematchContainer.style.display="flex";
         $('#player-declined-rematch').modal('show');
+        setWinnerContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         rematchContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
@@ -267,12 +300,14 @@ function toggleTttPrompts(promptToShow){
     else if(promptToShow=='rematchContainer'){
         rematchContainer.style.display="flex";
         $('#rematchModal').modal('show');
+        setWinnerContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
         playerDeclinedRematchContainer.style.display="none";
     }
     else if(promptToShow=='searchingForPlayerContainer'){
+        setWinnerContainer.style.display="none";
         searchingForPlayerContainer.style.display="flex";
         rematchContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
@@ -283,6 +318,7 @@ function toggleTttPrompts(promptToShow){
         playerTurnPromptContainer.style.display="flex";
         $('#exampleModalCenter').modal('show');
         $('#rematchModal').modal('hide');
+        setWinnerContainer.style.display="none";
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";

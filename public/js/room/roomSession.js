@@ -61,9 +61,10 @@ function deleteLocalStorageTicTacToeItems(){
     localStorage.removeItem('tttRoomID');
     localStorage.removeItem('tttBoard');
 }
-
-// new
 socket.on('game-end',({gameEnd,winner})=>{
     console.log('game-end!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     console.log('game-end'+gameEnd);
+    const setWinnerTitle=document.getElementById('set-winner-title');
+    setWinnerTitle.innerHTML="Set Winner "+winner;
+    toggleTttPrompts('setWinnerContainer');
 });
