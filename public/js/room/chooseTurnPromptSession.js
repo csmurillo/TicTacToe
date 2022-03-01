@@ -4,12 +4,10 @@ socket.on('player-choose-turn-prompt-session',()=>{
     // show prompt message to first turn player
     toggleTttPrompts('playerTurnPromptContainer');
 });
-
 socket.on('wait-player-choose-turn-prompt-session',()=>{
     // show to specified user
     toggleTttPrompts('waitPlayerChooseTurnPromptContainer');
     var waitingForPlayer=document.getElementById("wait-for-player");
     waitingForPlayer.innerHTML="Waiting For Player To Choose Turn ...";
 });
-
 

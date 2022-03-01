@@ -110,7 +110,6 @@ io.on('connection', (socket) => {
         let player1=roomFactory.getRoomPlayer1Username(roomID);
         let player2=roomFactory.getRoomPlayer2Username(roomID);
         // debug working
-        // console.log('debug'+player1+''+player2);
 
         // add room id to socket as a property
         socket.roomID=roomID;
@@ -133,9 +132,20 @@ io.on('connection', (socket) => {
             });
         }     
     });
-
+    // choose symbol
+    socket.on('choose-symbol',()=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+        const player1=roomFactory.getRoomPlayer1(roomID);
+        if(player1==socket.userID){
+            socket.emit('player-choose-symbol-prompt-session',{});
+        }
+        else{
+            socket.emit('wait-player-choose-symbol-prompt-session',{});
+        }
+    });
     // choose turn prompt session
     socket.on('choose-turn-prompt-session',()=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
         let playerTurn = roomFactory.getRoomPlayerFirstTurn(socket.roomID);
         if(playerTurn==socket.userID){
             socket.emit('player-choose-turn-prompt-session',{});
@@ -145,6 +155,28 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('set-players-symbols',({playerSymbolChoosen})=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+
+        let playerPos=roomFactory.getPlayerPosition(socket.userID,roomID);
+        let player2=roomFactory.getRoomPlayer2(roomID);
+
+        // check for player1
+        if(playerPos=='player-1'){
+            if(playerSymbolChoosen=='X'||playerSymbolChoosen=='O'){
+                roomFactory.setPlayerSymbol(socket.userID,playerSymbolChoosen,roomID);
+                // set player symbol to other symbol
+                // example if player chose X opponent symbol will be O
+                if(playerSymbolChoosen=='X'){
+                    roomFactory.setPlayerSymbol(player2,'O',roomID);
+                } 
+                else if(playerSymbolChoosen=='O'){
+                    roomFactory.setPlayerSymbol(player2,'O',roomID);
+                }
+            }
+        }
+    });
+    
     // set players turn
     socket.on('set-players-turns',({turnChoosen})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
@@ -154,26 +186,26 @@ io.on('connection', (socket) => {
             let player2=roomFactory.getRoomPlayer2(roomID);
             if(turnChoosen=='first'){
                 roomFactory.setRoomPlayerTurn(socket.userID,roomID);
-                roomFactory.setPlayerSymbol(socket.userID,'X',roomID);
-                roomFactory.setPlayerSymbol(player2,'O',roomID);
+                // roomFactory.setPlayerSymbol(socket.userID,'X',roomID);
+                // roomFactory.setPlayerSymbol(player2,'O',roomID);
             }
             else if(turnChoosen=='second'){
                 roomFactory.setRoomPlayerTurn(player2,roomID);
-                roomFactory.setPlayerSymbol(player2,'X',roomID);
-                roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
+                // roomFactory.setPlayerSymbol(player2,'X',roomID);
+                // roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
             }
         }
         else if(playerPos=='player-2'){
             let player1=roomFactory.getRoomPlayer1(roomID);
             if(turnChoosen=='first'){
                 roomFactory.setRoomPlayerTurn(socket.userID,roomID);
-                roomFactory.setPlayerSymbol(socket.userID,'X',roomID);
-                roomFactory.setPlayerSymbol(player1,'O',roomID);
+                // roomFactory.setPlayerSymbol(socket.userID,'X',roomID);
+                // roomFactory.setPlayerSymbol(player1,'O',roomID);
             }
             else if(turnChoosen=='second'){
                 roomFactory.setRoomPlayerTurn(player1,roomID);
-                roomFactory.setPlayerSymbol(player1,'X',roomID);
-                roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
+                // roomFactory.setPlayerSymbol(player1,'X',roomID);
+                // roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
             }
         }
         console.log('new board'+roomFactory.getRoomBoardGame(roomID).board);
@@ -364,6 +396,15 @@ io.on('connection', (socket) => {
                 }
             );
         }
+        setTimeout(()=>{
+            const session = sessionStorage.getSession(socket.sessionID);
+            if(session.connected){
+                console.log('user is connected');
+            }
+            else{
+                console.log('user lost connection');
+            }
+        },10000);
     });
 });
 

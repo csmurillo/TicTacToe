@@ -17,9 +17,16 @@ socket.on('room-details',({roomID,currentPlayer,player1Username,player2Username}
     // remove searching for player message
     var searchingForPlayer=document.getElementById("searching-for-player");
     searchingForPlayer.style.display="none";
-    // emit to server choose turn prompt
+    
+    // emit to server choose symbol prompt
     // will display prompt to specified user
-    socket.emit('choose-turn-prompt-session',{});
+    socket.emit('choose-symbol',{});
+
+    $('#chooseSymbolModal').on('hidden.bs.modal', function (e) {
+        // emit to server choose turn prompt
+        // will display prompt to specified user
+        socket.emit('choose-turn-prompt-session',{});
+    });
 });
 socket.on('searching-for-player',()=>{
     // adds searching for player message to screen

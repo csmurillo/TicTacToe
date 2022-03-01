@@ -192,8 +192,33 @@
                                 </div>
                             </div>
                             <div>
-                                <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn (X)</button>
-                                <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn (O)</button>
+                                <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn</button>
+                                <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div id="wait-player-choose-symbol-prompt-container">
+            <div id="wait-for-player-choose-symbol"></div>
+        </div>
+        <div id="choose-symbol-prompt-container">
+            <!-- Modal -->
+            <div class="modal fade" id="chooseSymbolModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body center">
+                        <div>
+                            <div>
+                                <div id="choose-symbol-title-prompt-container">
+                                    Please Choose Symbol:
+                                </div>
+                            </div>
+                            <div class="center">
+                                <button id="X-btn" class="btn btn-primary mr-5" onclick="chooseSymbol('X')">(X)</button>
+                                <button id="O-btn" class="btn btn-secondary" onclick="chooseSymbol('O')">(O)</button>
                             </div>
                         </div>
                     </div>
@@ -204,6 +229,10 @@
     </div>
 </div>
 <script>
+    function chooseSymbol(symbol){
+        socket.emit('set-players-symbols',{playerSymbolChoosen:symbol});
+        $('#chooseSymbolModal').modal('hide')
+    }
     function tictactoeSymbolOver(event){
         if(event.target.className=='ttt-block'){
             console.log('ttt-block');
@@ -248,6 +277,8 @@
     }
 
 function toggleTttPrompts(promptToShow){
+    var waitPlayerChooseSymbolContainer=document.getElementById('wait-player-choose-symbol-prompt-container');
+    var chooseSymbolContainer=document.getElementById('choose-symbol-prompt-container');
     var setWinnerContainer=document.getElementById('set-winner-container');
     var rematchContainer=document.getElementById('rematch-container');
     var playerDeclinedRematchContainer=document.getElementById('player-declined-rematch-container');
@@ -259,43 +290,82 @@ function toggleTttPrompts(promptToShow){
         $('#exampleModalCenter').modal('hide');
         $('#rematchModal').modal('hide');
         $('#player-declined-rematch-container').modal('hide');
+        $('#chooseSymbolModal').modal('hide');
         setWinnerContainer.style.display="none";
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
         playerDeclinedRematchContainer.style.display="none";
+        chooseSymbolContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
+    }
+    else if(promptToShow=='waitPlayerChooseSymbolContainer'){
+        waitPlayerChooseSymbolContainer.style.display="display";
+        $('#exampleModalCenter').modal('hide');
+        $('#rematchModal').modal('hide');
+        $('#player-declined-rematch-container').modal('hide');
+        $('#chooseSymbolModal').modal('hide');
+        setWinnerContainer.style.display="none";
+        rematchContainer.style.display="none";
+        searchingForPlayerContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
+    }
+    else if(promptToShow=='chooseSymbolContainer'){
+        chooseSymbolContainer.style.display="flex";
+        $('#chooseSymbolModal').modal('show');
+        $('#exampleModalCenter').modal('hide');
+        $('#rematchModal').modal('hide');
+        $('#player-declined-rematch-container').modal('hide');
+        setWinnerContainer.style.display="none";
+        rematchContainer.style.display="none";
+        searchingForPlayerContainer.style.display="none";
+        waitPlayerChooseTurnPromptContainer.style.display="none";
+        playerTurnPromptContainer.style.display="none";
+        playerDeclinedRematchContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
     }
     else if(promptToShow=='setWinnerContainer'){
         setWinnerContainer.style.display="flex";
         $('#setWinnerModal').modal('show');
         $('#exampleModalCenter').modal('hide');
         $('#rematchModal').modal('hide');
+        $('#chooseSymbolModal').modal('hide');
         $('#player-declined-rematch-container').modal('hide');
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
         playerDeclinedRematchContainer.style.display="none";
+        chooseSymbolContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
     }
     else if(promptToShow=='waitPlayerChooseTurnPromptContainer'){
         waitPlayerChooseTurnPromptContainer.style.display="flex";
         $('#exampleModalCenter').modal('hide');
         $('#rematchModal').modal('hide');
+        $('#chooseSymbolModal').modal('hide');
         setWinnerContainer.style.display="none";
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
         playerDeclinedRematchContainer.style.display="none";
+        chooseSymbolContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
     }
     else if(promptToShow=='playerDeclinedRematchContainer'){
         playerDeclinedRematchContainer.style.display="flex";
         $('#player-declined-rematch').modal('show');
+        $('#chooseSymbolModal').modal('hide');
         setWinnerContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         rematchContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
+        chooseSymbolContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
     }
     else if(promptToShow=='rematchContainer'){
         rematchContainer.style.display="flex";
@@ -305,30 +375,39 @@ function toggleTttPrompts(promptToShow){
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
         playerDeclinedRematchContainer.style.display="none";
+        chooseSymbolContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
     }
     else if(promptToShow=='searchingForPlayerContainer'){
+        $('#chooseSymbolModal').modal('hide');
         setWinnerContainer.style.display="none";
         searchingForPlayerContainer.style.display="flex";
         rematchContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerTurnPromptContainer.style.display="none";
         playerDeclinedRematchContainer.style.display="none";
+        chooseSymbolContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
     }
     else if(promptToShow=='playerTurnPromptContainer'){
         playerTurnPromptContainer.style.display="flex";
         $('#exampleModalCenter').modal('show');
         $('#rematchModal').modal('hide');
+        $('#chooseSymbolModal').modal('hide');
         setWinnerContainer.style.display="none";
         rematchContainer.style.display="none";
         searchingForPlayerContainer.style.display="none";
         waitPlayerChooseTurnPromptContainer.style.display="none";
         playerDeclinedRematchContainer.style.display="none";
+        chooseSymbolContainer.style.display="none";
+        waitPlayerChooseSymbolContainer.style.display="none";
     }
 }
 
 
 </script>
 <script src="../js/room/roomSession.js"></script>
+<script src="../js/room/chooseSymbolPromptSession.js"></script>
 <script src="../js/room/chooseTurnPromptSession.js"></script>
 <script src="../js/room/setPlayersTurns.js"></script>
 <script src="../js/room/tictactoeStartGame.js"></script>
