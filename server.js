@@ -171,7 +171,7 @@ io.on('connection', (socket) => {
                     roomFactory.setPlayerSymbol(player2,'O',roomID);
                 } 
                 else if(playerSymbolChoosen=='O'){
-                    roomFactory.setPlayerSymbol(player2,'O',roomID);
+                    roomFactory.setPlayerSymbol(player2,'X',roomID);
                 }
             }
         }
@@ -331,6 +331,12 @@ io.on('connection', (socket) => {
                     });
                 }
             }
+            else if(board.boardFull()){
+                console.log('board full board bullllllllllllllllllllllllllllllllllllllll');
+                io.in(''+roomID).emit('rematch',{
+                    rematch:true
+                });
+            }
             // no winner keep tictactoe game active
             else{
                 io.in(''+roomID).emit('tictactoe-game',{
@@ -398,25 +404,17 @@ io.on('connection', (socket) => {
         }
         setTimeout(()=>{
             const session = sessionStorage.getSession(socket.sessionID);
-            if(session.connected){
-                console.log('user is connected');
-            }
-            else{
-                console.log('user lost connection');
+            if(session!=undefined){
+                if(session.connected){
+                    console.log('user is connected');
+                }
+                else{
+                    console.log('user lost connection');
+                }
             }
         },10000);
     });
 });
-
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
-
-
-
-
-
-
-
-
-

@@ -113,7 +113,6 @@
         font-size: 20px;
     }
 </style>
-
 <div id="ttt-prompts-containers">
     <div id="ttt-prompts-placeholder">
         <div id="rematch-container">
@@ -164,7 +163,7 @@
                                         <h1 id="set-winner-title" class="center"></h1>
                                     </div>
                                     <div class="center">
-                                        <button id="back-home">Back Home</button>
+                                        <button id="back-home" onClick="returnHome()">Back Home</button>
                                     </div>
                                 </div>
                             </div>
@@ -229,6 +228,9 @@
     </div>
 </div>
 <script>
+    function returnHome(){
+        window.location.href = '/';
+    }
     function chooseSymbol(symbol){
         socket.emit('set-players-symbols',{playerSymbolChoosen:symbol});
         $('#chooseSymbolModal').modal('hide')
@@ -413,3 +415,5 @@ function toggleTttPrompts(promptToShow){
 <script src="../js/room/tictactoeStartGame.js"></script>
 <script src="../js/room/tictactoeGame.js"></script>
 <script src="../js/room/rematch.js"></script>
+
+

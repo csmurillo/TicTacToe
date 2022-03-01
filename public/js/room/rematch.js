@@ -1,9 +1,12 @@
 socket.on('rematch',({rematch})=>{
-    console.log('rematch::rematch');
+    console.log('rematch::rematch!!!!!!!!!!!!!!!!!');
     // var rematchContainer=document.getElementById('rematch-container');
     if(rematch){
+        console.log('rematch container now viewable!');
+        var tttPrompts= document.getElementById('ttt-prompts-containers');
+        tttPrompts.style.zIndex="unset";
         toggleTttPrompts('rematchContainer');
-        // $('#rematchModal').modal('show');
+        $('#rematchModal').modal('show');
         // rematchContainer.innerHTML="Rematch";
     }
 });
