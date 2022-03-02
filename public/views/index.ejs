@@ -6,7 +6,10 @@
         <div id="form-container">
             <form id="form" autocomplete="off">
                 <div id="username-container" class="center">
-                    <input id="username" type="text" placeholder="Username">
+                    <div>
+                        <input id="username" type="text" placeholder="Username">
+                        <div id="username-error"></div>
+                    </div>
                 </div>
                 <div id="find-player-container" class="center">
                     <button id="find-player-btn" type="submit">Find Player</button>
@@ -22,7 +25,9 @@
         let username = e.target.elements.username.value;
         // console.log('val:'+username);
         socket.auth = { username };
-        socket.connect();
+        console.log('what does socket connect return');
+        console.log(socket.connect());
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         socket.emit('join-session',{});
     });
     socket.on('load-room-session',({sessionID,userID,username,roomID})=>{
@@ -40,3 +45,4 @@
         }
     });
 </script>
+<script src="../js/room/clientError.js"></script>

@@ -6,7 +6,7 @@ socket.on('rematch',({rematch})=>{
         var tttPrompts= document.getElementById('ttt-prompts-containers');
         tttPrompts.style.zIndex="unset";
         toggleTttPrompts('rematchContainer');
-        $('#rematchModal').modal('show');
+        // $('#winnerRematchModal').modal('show');
         // rematchContainer.innerHTML="Rematch";
     }
 });

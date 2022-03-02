@@ -51,8 +51,14 @@ io.use((socket, next) => {
         }
     }
     const username = socket.handshake.auth.username;
+    console.log('inside socker middleware');
+    const usernameExist=sessionStorage.userNameExist(username);
+    console.log('------------------------');
+    if(usernameExist){
+        return next(new Error("usernameExist"));
+    }
     if (!username) {
-      return next(new Error("invalid username"));
+      return next(new Error("Invalid username"));
     }
     // create new session
     socket.sessionID = uuidv4();

@@ -25,11 +25,19 @@ class UserSessionStorage {
         }
         return false;
     }
+    userNameExist(username){
+        console.log('checking if username exist');
+        for (const [key, value] of  this.userSessionStorage.entries()) {
+            console.log(key, value.username);
+            if(username.toLowerCase()==value.username.toLowerCase()){
+                return true;
+            }
+        }
+        return false;
+        console.log('end of checking if username exist');
+    }
 }
-
 module.exports = { UserSessionStorage }
-
-
 
 
 
