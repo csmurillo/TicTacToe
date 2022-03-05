@@ -374,7 +374,14 @@ io.on('connection', (socket) => {
             socket.emit('waiting-for-rematch',{});
         }  
     });
-
+    const removeUser = (sessionID)=>{
+        sessionStorage.removeSession(sessionID);
+    };
+    const setRoomForDeletion = ()=>{
+        let roomID = roomFactory.getUserRoomID(socket.userID);
+        roomFactory.clearRoom(roomID);
+        roomFactory.setRoomInProgress(roomID,false);
+    };
     socket.on('end-game',()=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
         // roomFactory.clearRoom(roomID);
@@ -389,10 +396,12 @@ io.on('connection', (socket) => {
     socket.on('clear-game',()=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
         roomFactory.clearRoom(roomID);
+        roomFactory.setRoomInProgress(roomID,false);
         sessionStorage.removeSession(socket.sessionID);
     });
 
     socket.on('disconnect',()=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
         const sessionValid=sessionStorage.sessionExist(socket.sessionID);
         if(sessionValid){
             console.log('disconnected!!!');
@@ -416,6 +425,11 @@ io.on('connection', (socket) => {
                 }
                 else{
                     console.log('user lost connection');
+                    sessionStorage.removeSession(socket.sessionID);
+
+                    socket.to(''+roomID).emit('opponent-disconnected',{
+                        disconnected:true
+                    });
                 }
             }
         },10000);
