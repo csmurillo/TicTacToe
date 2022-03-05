@@ -143,10 +143,14 @@ class RoomFactory {
                 playerTurn:null,
                 roomInProgress:false,
                 playersExit:false,
+                roomToBeReinitialized:false
             });
         }    
     }
-    
+    setRoomToBeReinitialized(roomID,condition){
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room,roomToBeReinitialized:condition});
+    }
     // isRoomEmpty
     roomExist(roomID){
         const room = this.RoomFactory.get(roomID);
@@ -435,11 +439,36 @@ class RoomFactory {
         this.RoomFactory.set(roomID,{
             board:new BoardGame(),
             player1:null,
+            player1Username:null,
             player1Symbol:null,
+            player1Rematch:false,
             player2:null,
+            player2Username:null,
             player2Symbol:null,
+            player2Rematch:false,
+            playerFirstTurn:null,
             playerTurn:null,
-            roomInProgress:false
+            roomInProgress:false,
+            playersExit:false,
+            roomToBeReinitialized:false
+        });
+    }
+    roomToBeReinitialize(roomID){
+        this.RoomFactory.set(roomID,{
+            board:new BoardGame(),
+            player1:null,
+            player1Username:null,
+            player1Symbol:null,
+            player1Rematch:false,
+            player2:null,
+            player2Username:null,
+            player2Symbol:null,
+            player2Rematch:false,
+            playerFirstTurn:null,
+            playerTurn:null,
+            roomInProgress:false,
+            playersExit:false,
+            roomToBeReinitialized:true
         });
     }
     // debug purpose

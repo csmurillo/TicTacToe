@@ -26,7 +26,7 @@ function rematch(answer){
         socket.emit('rematch',{});
     }
     else{
-        socket.emit('end-game',{});
+        socket.emit('game-end',{});
     }
 }
 

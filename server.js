@@ -160,7 +160,6 @@ io.on('connection', (socket) => {
             socket.emit('wait-player-choose-turn-prompt-session',{});
         }
     });
-
     socket.on('set-players-symbols',({playerSymbolChoosen})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
 
@@ -181,8 +180,7 @@ io.on('connection', (socket) => {
                 }
             }
         }
-    });
-    
+    });    
     // set players turn
     socket.on('set-players-turns',({turnChoosen})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
@@ -224,7 +222,6 @@ io.on('connection', (socket) => {
             player2Symbol:roomFactory.getPlayer2Symbol(roomID)
         });
     });
-
     socket.on('player-info',()=>{
         console.log('playerinfooooooooooooooooooooooooooo'+socket.userID);
         let roomID=roomFactory.getUserRoomID(socket.userID);
@@ -234,9 +231,7 @@ io.on('connection', (socket) => {
               playerUsername:roomFactory.getPlayerUserName(socket.userID,roomID),
               playerSymbol:roomFactory.getPlayerSymbol(socket.userID,roomID)
           });
-
     });
-
     socket.on('tictactoe-game',({markPos})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
 
@@ -352,7 +347,6 @@ io.on('connection', (socket) => {
             } 
         }
     });
-
     socket.on('rematch',({rematch})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
         roomFactory.setPlayerRematch(socket.userID,roomID);
@@ -367,39 +361,44 @@ io.on('connection', (socket) => {
             let board = roomFactory.getRoomBoardGame(roomID);
             board.rematch();
             io.in(''+roomID).emit('start-rematch',{});
-            console.log('both player both player reponsde that they want a rematch indeed');
+            console.log('both player both player respond that they want a rematch indeed');
         }
         else{
             // waiting player will be emitted waiting for other player rematch
             socket.emit('waiting-for-rematch',{});
         }  
     });
-    const removeUser = (sessionID)=>{
+    const removeUserSession = (sessionID)=>{
         sessionStorage.removeSession(sessionID);
     };
-    const setRoomForDeletion = ()=>{
-        let roomID = roomFactory.getUserRoomID(socket.userID);
-        roomFactory.clearRoom(roomID);
-        roomFactory.setRoomInProgress(roomID,false);
+    const reinitializeTictactoeRoom = (userID)=>{
+        let roomID = roomFactory.getUserRoomID(userID);
+        console.log(roomID+'value!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        roomFactory.roomToBeReinitialize(roomID);
     };
-    socket.on('end-game',()=>{
-        let roomID=roomFactory.getUserRoomID(socket.userID);
-        // roomFactory.clearRoom(roomID);
-        sessionStorage.removeSession(socket.sessionID);
-        socket.emit('end-game-redirect-home',{});
-        // io.in(''+roomID).emit('redirect-home',{});
-        roomFactory.setRoomInProgress(roomID,false);
-        socket.to(''+roomID).emit('end-game-redirect-opponent-home',{});
-        console.log('opppositeopppositeopppositeoppposite');
-    });
+    const removePlayerSessions=(roomID,playerSessionID,playerUserID)=>{
+        const opponentID= roomFactory.getOpponent(playerUserID,roomID);
+        const opponentSessionID=sessionStorage.getSessionID(opponentID);
+        removeUserSession(playerSessionID);
+        removeUserSession(opponentSessionID);
+    }
+    socket.on('game-end',()=>{
+        // remove player sessions from server sessionStorage
+        let roomID = roomFactory.getUserRoomID(socket.userID);
+        removePlayerSessions(roomID,socket.sessionID,socket.userID);
 
-    socket.on('clear-game',()=>{
-        let roomID=roomFactory.getUserRoomID(socket.userID);
-        roomFactory.clearRoom(roomID);
-        roomFactory.setRoomInProgress(roomID,false);
-        sessionStorage.removeSession(socket.sessionID);
+        // emit
+        socket.emit('game-end-redirect-home',{});
+        // emit to opponent
+        socket.to(''+roomID).emit('game-end-redirect-opponent-home',{});
+        reinitializeTictactoeRoom(socket.userID);
     });
-
+    socket.on('game-end-2',()=>{
+        // remove player sessions from server sessionStorage
+        let roomID = roomFactory.getUserRoomID(socket.userID);
+        removePlayerSessions(roomID,socket.sessionID,socket.userID);
+        reinitializeTictactoeRoom(socket.userID);
+    });
     socket.on('disconnect',()=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
         const sessionValid=sessionStorage.sessionExist(socket.sessionID);
@@ -425,9 +424,12 @@ io.on('connection', (socket) => {
                 }
                 else{
                     console.log('user lost connection');
-                    sessionStorage.removeSession(socket.sessionID);
+                    // remove player sessions from server sessionStorage
+                    let roomID = roomFactory.getUserRoomID(socket.userID);
+                    removePlayerSessions(roomID,socket.sessionID,socket.userID);
+                    reinitializeTictactoeRoom(socket.userID);
 
-                    socket.to(''+roomID).emit('opponent-disconnected',{
+                    socket.to(''+roomID).emit('game-end-opponent-disconnected',{
                         disconnected:true
                     });
                 }
@@ -438,3 +440,5 @@ io.on('connection', (socket) => {
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
+
+

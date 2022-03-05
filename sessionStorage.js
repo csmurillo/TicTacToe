@@ -6,27 +6,29 @@ class UserSessionStorage {
         this.userSessionStorage.set(sessionID,sessionInfo);
     }
     removeSession(sessionID){
-        console.log('session deleted'+sessionID);
         this.userSessionStorage.delete(sessionID);
     }
     getStorage(){
         return this.userSessionStorage;
     }
     getSession(sessionID){
-        console.log('session retrieved'+sessionID);
-        console.log('!,,,!'+this.userSessionStorage.get(sessionID)+'!,,,!');
-        console.log('!((((((((((((((()))))))))))))))!');
         return this.userSessionStorage.get(sessionID);
     }
+    getSessionID(userID){
+        for (const [key, value] of  this.userSessionStorage.entries()) {
+            if(value.userID==userID){
+                return key;
+            }
+        }
+        return null;
+    }
     sessionExist(sessionID){
-        console.log('check sessionExist'+this.userSessionStorage.get(sessionID)+'~~~~');
         if(this.userSessionStorage.get(sessionID)){
             return true;
         }
         return false;
     }
     userNameExist(username){
-        console.log('checking if username exist');
         for (const [key, value] of  this.userSessionStorage.entries()) {
             console.log(key, value.username);
             if(username.toLowerCase()==value.username.toLowerCase()){
@@ -34,7 +36,6 @@ class UserSessionStorage {
             }
         }
         return false;
-        console.log('end of checking if username exist');
     }
 }
 module.exports = { UserSessionStorage }
