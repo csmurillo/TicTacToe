@@ -2,7 +2,6 @@ socket.on('game-end',({gameEnd,winner})=>{
     const setWinnerTitle=document.getElementById('set-winner-title');
     setWinnerTitle.innerHTML="Set Winner "+winner;
     toggleTttPrompts('setWinnerContainer');
-    socket.emit('game-end-2',{});
 });
 socket.on('game-end-redirect-home',()=>{
     deleteCookies();

@@ -109,6 +109,7 @@ io.on('connection', (socket) => {
 
     // room session
     socket.on('room-session',()=>{
+        console.log('room-session-hit!!!');
         let roomID=roomFactory.getUserRoomID(socket.userID);
         // player1 will be first
         roomFactory.setRoomPlayerFirstTurn(roomID);
@@ -123,6 +124,7 @@ io.on('connection', (socket) => {
         socket.join(''+roomID);
         
         if(player1&&player2){
+            roomFactory.setRoomInProgress(socket.roomID,true);
             // emit room details to both current players in room:roomID
             io.in(''+roomID).emit('room-details',{
                 roomID:roomFactory.getUserRoomID(socket.userID),
@@ -297,6 +299,8 @@ io.on('connection', (socket) => {
                 });
                 // check if final winner: end game
                 if(finalWinningPlayer){
+                    reinitializeTictactoeRoom(socket.userID);
+                    removePlayerSessions(roomID,socket.sessionID,socket.userID);
                     io.in(''+roomID).emit('game-end',{
                         gameEnd:true,
                         winner:roomFactory.getRoomPlayer1Username(roomID)
@@ -310,30 +314,28 @@ io.on('connection', (socket) => {
                 }
             }
             else if(winningPlayer=='player2'){
-                // console.log('player won is player2'+roomFactory.getRoomPlayer2Username(roomID));
                 io.in(''+roomID).emit('game-finished',{
                     board:roomFactory.getRoomBoardGame(roomID).board,
                     winner:roomFactory.getRoomPlayer2Username(roomID),
                     player1Wins:board.getPlayer1Wins(),
                     player2Wins:board.getPlayer2Wins()
                 });
-                // console.log('reachedplayer2');
                 // check if final winner: end game
                 if(finalWinningPlayer){
+                    reinitializeTictactoeRoom(socket.userID);
+                    removePlayerSessions(roomID,socket.sessionID,socket.userID);
                     io.in(''+roomID).emit('game-end',{
                         gameEnd:true,
                         winner:roomFactory.getRoomPlayer2Username(roomID)
                     });
                 }
                 else{
-                    // console.log('reachedplayer1'+roomID);
                     io.in(''+roomID).emit('rematch',{
                         rematch:true
                     });
                 }
             }
             else if(board.boardFull()){
-                console.log('board full board bullllllllllllllllllllllllllllllllllllllll');
                 io.in(''+roomID).emit('rematch',{
                     rematch:true
                 });
@@ -353,15 +355,15 @@ io.on('connection', (socket) => {
 
         let player1RematchResponse=roomFactory.getPlayer1Rematch(roomID);
         let player2RematchResponse=roomFactory.getPlayer2Rematch(roomID);
-        console.log('player1Res'+player1RematchResponse+'player2Res'+player2RematchResponse);
+
         if(player1RematchResponse&&player2RematchResponse){
+            // both player accept to start rematch
             roomFactory.clearPlayerRematch(roomID);
             roomFactory.updateRoomPlayerFirstTurn(roomID);
             // clear board
             let board = roomFactory.getRoomBoardGame(roomID);
             board.rematch();
             io.in(''+roomID).emit('start-rematch',{});
-            console.log('both player both player respond that they want a rematch indeed');
         }
         else{
             // waiting player will be emitted waiting for other player rematch
@@ -373,7 +375,6 @@ io.on('connection', (socket) => {
     };
     const reinitializeTictactoeRoom = (userID)=>{
         let roomID = roomFactory.getUserRoomID(userID);
-        console.log(roomID+'value!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         roomFactory.roomToBeReinitialize(roomID);
     };
     const removePlayerSessions=(roomID,playerSessionID,playerUserID)=>{
@@ -385,26 +386,28 @@ io.on('connection', (socket) => {
     socket.on('game-end',()=>{
         // remove player sessions from server sessionStorage
         let roomID = roomFactory.getUserRoomID(socket.userID);
-        removePlayerSessions(roomID,socket.sessionID,socket.userID);
-
-        // emit
-        socket.emit('game-end-redirect-home',{});
-        // emit to opponent
-        socket.to(''+roomID).emit('game-end-redirect-opponent-home',{});
-        reinitializeTictactoeRoom(socket.userID);
+        if(roomID){
+            reinitializeTictactoeRoom(socket.userID);
+            removePlayerSessions(roomID,socket.sessionID,socket.userID);
+            // emit
+            socket.emit('game-end-redirect-home',{});
+            // emit to opponent
+            socket.to(''+roomID).emit('game-end-redirect-opponent-home',{});
+        }
     });
     socket.on('game-end-2',()=>{
         // remove player sessions from server sessionStorage
         let roomID = roomFactory.getUserRoomID(socket.userID);
-        removePlayerSessions(roomID,socket.sessionID,socket.userID);
-        reinitializeTictactoeRoom(socket.userID);
+        if(roomID){
+            reinitializeTictactoeRoom(socket.userID);
+            removePlayerSessions(roomID,socket.sessionID,socket.userID);
+        }
     });
     socket.on('disconnect',()=>{
+        console.log('disconnectdisconnectdisconnectdisconnectdisconnectdisconnect!!!!!!!disconnect');
         let roomID=roomFactory.getUserRoomID(socket.userID);
         const sessionValid=sessionStorage.sessionExist(socket.sessionID);
         if(sessionValid){
-            console.log('disconnected!!!');
-            console.log('connected false!@#!@#');
             // save session
             sessionStorage.saveSession(
                 socket.sessionID,
@@ -426,8 +429,8 @@ io.on('connection', (socket) => {
                     console.log('user lost connection');
                     // remove player sessions from server sessionStorage
                     let roomID = roomFactory.getUserRoomID(socket.userID);
-                    removePlayerSessions(roomID,socket.sessionID,socket.userID);
                     reinitializeTictactoeRoom(socket.userID);
+                    removePlayerSessions(roomID,socket.sessionID,socket.userID);
 
                     socket.to(''+roomID).emit('game-end-opponent-disconnected',{
                         disconnected:true
@@ -440,5 +443,8 @@ io.on('connection', (socket) => {
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
+
+
+
 
 

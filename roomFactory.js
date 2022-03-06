@@ -198,7 +198,7 @@ class RoomFactory {
     joinRoom(userID,username){
         let roomJoined=null;
         for (const [key, value] of this.RoomFactory.entries()) {
-            // if(value.roomInProgress==null){
+            if(value.roomInProgress==false){
                 if(value.player1==null){
                     this.RoomFactory.set(key,{...value, player1:userID,player1Username:username});
                     roomJoined=key;
@@ -209,7 +209,7 @@ class RoomFactory {
                     roomJoined=key;
                     break;
                 }
-            // }
+            }
         }
         return roomJoined;
     }
@@ -383,6 +383,13 @@ class RoomFactory {
         const room=this.RoomFactory.get(roomID);
         return room.player1Symbol;
     }
+    getRoomToBeReinitialized(roomID){
+        const room=this.RoomFactory.get(roomID);
+        console.log(room);
+        console.log(room.player1Symbol);
+        console.log('-------------------------');
+        return room.roomToBeReinitialized;
+    }
     
     getPlayer2Symbol(roomID){
         const room=this.RoomFactory.get(roomID);
@@ -454,22 +461,8 @@ class RoomFactory {
         });
     }
     roomToBeReinitialize(roomID){
-        this.RoomFactory.set(roomID,{
-            board:new BoardGame(),
-            player1:null,
-            player1Username:null,
-            player1Symbol:null,
-            player1Rematch:false,
-            player2:null,
-            player2Username:null,
-            player2Symbol:null,
-            player2Rematch:false,
-            playerFirstTurn:null,
-            playerTurn:null,
-            roomInProgress:false,
-            playersExit:false,
-            roomToBeReinitialized:true
-        });
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room,roomToBeReinitialized:true});
     }
     // debug purpose
     roomContent(){
