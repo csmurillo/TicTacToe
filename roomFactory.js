@@ -131,6 +131,7 @@ class RoomFactory {
         for(var i=0; i<100;i++){
             this.RoomFactory.set(uuidv4(),{
                 board:new BoardGame(),
+                roomState:'',
                 player1:null,
                 player1Username:null,
                 player1Symbol:null,
@@ -146,6 +147,14 @@ class RoomFactory {
                 roomToBeReinitialized:false
             });
         }    
+    }
+    setRoomState(roomID,state){
+        const room=this.RoomFactory.get(roomID);
+        this.RoomFactory.set(roomID,{...room, roomState:state});
+    }
+    getRoomState(roomID){
+        const room=this.RoomFactory.get(roomID);
+        return room.roomState;
     }
     setRoomToBeReinitialized(roomID,condition){
         const room=this.RoomFactory.get(roomID);

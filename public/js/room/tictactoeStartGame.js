@@ -40,5 +40,5 @@ socket.on('player-info',(playerInfo)=>{
     localStorage.setItem('tttPlayerInfo',JSON.stringify(playerInfo));
     var playerUsername1=document.getElementById(playerPosition+"-username");
     playerUsername1.style.textDecoration="underline";
-    // playerUsername.style="text-decoration: underline;";
 });
+
