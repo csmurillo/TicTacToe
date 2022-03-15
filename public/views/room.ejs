@@ -94,24 +94,52 @@
         </div>    
     </div>
 </div>
-
-<style>
-    #winner-player{
-
-    }
-    #rematch-prompt-container{
-        margin-bottom: 20px;
-    }
-    #rematch-true-btn{
-        font-size: 20px;
-        margin-right: 10px;
-    }
-    #rematch-false-btn{
-        font-size: 20px;
-    }
-</style>
 <div id="ttt-prompts-containers">
     <div id="ttt-prompts-placeholder">
+        <div id="choose-symbol-prompt-container">
+            <!-- Modal -->
+            <div class="modal fade" id="chooseSymbolModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body center">
+                        <div>
+                            <div>
+                                <div id="choose-symbol-title-prompt-container">
+                                    Please Choose Symbol:
+                                </div>
+                            </div>
+                            <div class="center">
+                                <button id="X-btn" class="btn btn-primary mr-5" onclick="chooseSymbol('X')">(X)</button>
+                                <button id="O-btn" class="btn btn-secondary" onclick="chooseSymbol('O')">(O)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div id="player-turn-prompt-container">
+            <!-- Modal -->
+            <div class="modal fade" id="player-turn-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body center">
+                        <div>
+                            <div>
+                                <div id="choose-turn-title-prompt-container">
+                                    Please Choose Turn:
+                                </div>
+                            </div>
+                            <div>
+                                <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn</button>
+                                <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
         <div id="winner-rematch-container">
             <!-- Modal -->
             <div class="modal fade" id="winnerRematchModal" tabindex="-1" role="dialog" aria-labelledby="rematchModal" aria-hidden="true" data-backdrop="static">
@@ -155,20 +183,6 @@
                 </div>
             </div>
         </div>
-        <div id="opponent-lost-connection-container">
-            <div id="opponent-lost-connection" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="lostConnectionModal" aria-hidden="true" data-backdrop="static">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body center">
-                            <div>
-                                <h1 id="opponent-lost-connection-title" class="center">Lost Connection</h1>
-                                <div id="opponent-lost-connection">Redirect in <span id="second-to-redirect-lost-connection">5</span> seconds</div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-            </div>
-        </div>
         <div id="player-declined-rematch-container">
             <div id="player-declined-rematch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="rematchModal" aria-hidden="true" data-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -203,58 +217,28 @@
                     </div>
             </div>
         </div>
-        <div id="searching-for-player-container">
-            <div id="searching-for-player"></div>
-        </div>
-        <div id="wait-player-choose-turn-prompt-container">
-            <div id="wait-for-player"></div>
-        </div>
-        <div id="player-turn-prompt-container">
-            <!-- Modal -->
-            <div class="modal fade" id="player-turn-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+        <div id="opponent-lost-connection-container">
+            <div id="opponent-lost-connection" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="lostConnectionModal" aria-hidden="true" data-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body center">
-                        <div>
+                    <div class="modal-content">
+                        <div class="modal-body center">
                             <div>
-                                <div id="title-prompt-container">
-                                    Please Choose Turn:
-                                </div>
-                            </div>
-                            <div>
-                                <button id="first-turn-btn" class="btn btn-primary mr-5" onclick="chooseTurnPrompt('first')">First Turn</button>
-                                <button id="second-turn-btn" class="btn btn-secondary" onclick="chooseTurnPrompt('second')">Second Turn</button>
+                                <h1 id="opponent-lost-connection-title" class="center">Lost Connection</h1>
+                                <div id="opponent-lost-connection">Redirect in <span id="second-to-redirect-lost-connection">5</span> seconds</div>
                             </div>
                         </div>
                     </div>
-                </div>
-                </div>
+                    </div>
             </div>
         </div>
         <div id="wait-player-choose-symbol-prompt-container">
             <div id="wait-for-player-choose-symbol"></div>
         </div>
-        <div id="choose-symbol-prompt-container">
-            <!-- Modal -->
-            <div class="modal fade" id="chooseSymbolModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body center">
-                        <div>
-                            <div>
-                                <div id="choose-symbol-title-prompt-container">
-                                    Please Choose Symbol:
-                                </div>
-                            </div>
-                            <div class="center">
-                                <button id="X-btn" class="btn btn-primary mr-5" onclick="chooseSymbol('X')">(X)</button>
-                                <button id="O-btn" class="btn btn-secondary" onclick="chooseSymbol('O')">(O)</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
+        <div id="wait-player-choose-turn-prompt-container">
+            <div id="wait-for-player"></div>
+        </div>
+        <div id="searching-for-player-container">
+            <div id="searching-for-player"></div>
         </div>
     </div>
 </div>
@@ -336,7 +320,7 @@ function toggleTttPrompts(promptToShow){
         opponentLostConnectionContainer.style.display="none";
     }
     else if(promptToShow=='waitPlayerChooseSymbolContainer'){
-        waitPlayerChooseSymbolContainer.style.display="display";
+        waitPlayerChooseSymbolContainer.style.display="flex";
     }
     else if(promptToShow=='chooseSymbolContainer'){
         // alert('inside choose symbol from room ejs');
@@ -370,13 +354,22 @@ function toggleTttPrompts(promptToShow){
         $('#winnerRematchModal').modal('show');
     }
     else if(promptToShow=='searchingForPlayerContainer'){
-        $('#chooseSymbolModal').modal('hide');
+        searchingForPlayerContainer.style.display="flex";
+        // $('#chooseSymbolModal').modal('hide');
     }
     else if(promptToShow=='playerTurnPromptContainer'){
         playerTurnPromptContainer.style.display="flex";
         $('#player-turn-modal').modal('show');
     }
 }
+    function load(){
+        toggleTttPrompts('none');
+        const session= localStorage.getItem('tttSessionID');
+        if(session){
+            toggleTttPrompts('searchingForPlayerContainer');
+        }
+    }
+    load();
 </script>
 <script src="../js/room/roomSession.js"></script>
 <script src="../js/room/chooseSymbolPromptSession.js"></script>

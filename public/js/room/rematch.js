@@ -3,7 +3,6 @@ socket.on('rematch',({rematch})=>{
         var tttPrompts= document.getElementById('ttt-prompts-containers');
         tttPrompts.style.zIndex="unset";
         toggleTttPrompts('none');
-        // toggleTttPrompts('rematchContainer');
         var rematchContainer=document.getElementById('rematch-container');
         rematchContainer.style.display="flex";
         $('#rematchModal').modal('show');
@@ -28,8 +27,6 @@ function rematch(answer){
         socket.emit('game-end',{});
     }
 }
-
-// 
 socket.on('rematch-state-wait-for-player',()=>{
     toggleTttPrompts('none');
     toggleTttPrompts('waitPlayerChooseTurnPromptContainer');
@@ -49,4 +46,3 @@ socket.on('rematch-state-rematch-prompt',()=>{
         winnerRematchModal.setAttribute("style", "display:block !important; float:left;");
     },400);
 });
-// 

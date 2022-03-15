@@ -16,15 +16,12 @@ socket.on('room-details',({roomID,roomState,currentPlayer,player1Username,player
     // remove searching for player message
     var searchingForPlayer=document.getElementById("searching-for-player");
     searchingForPlayer.style.display="none";
-    // alert('roomState'+roomState);
     if(roomState=='choose-symbol'||roomState==''){
-        alert('choose-symbol');
         // emit to server choose symbol prompt
         // will display prompt to specified user
         socket.emit('choose-symbol',{});
     }
     else if(roomState=='choose-turn'){
-        alert('choose-turn-prompt-session');
         socket.emit('choose-turn-prompt-session',{});
     }
     else if(roomState=='game'){
@@ -33,26 +30,10 @@ socket.on('room-details',({roomID,roomState,currentPlayer,player1Username,player
     }
     else if(roomState=='rematch'){
         socket.emit('rematch-state',{}); 
-        // toggleTttPrompts('none');
-        // var rematchContainer=document.getElementById('rematch-container');
-        // rematchContainer.style.display="flex";
-        // $('#rematchModal').modal('show');
-
-        
-        // let winnerRematchModal=document.getElementById('rematchModal');
-        // winnerRematchModal.className="modal show";
-        // setTimeout(()=>{
-        //     winnerRematchModal.setAttribute("style", "display:block !important; float:left;");
-        // },400);
     }
     else{
         toggleTttPrompts('none');
     }
-    // $('#chooseSymbolModal').on('hidden.bs.modal', function (e) {
-        // emit to server choose turn prompt
-        // will display prompt to specified user
-        // socket.emit('choose-turn-prompt-session',{});
-    // });
 });
 socket.on('searching-for-player',(roomState)=>{
     if(roomState!='game'||roomState!='rematch'){

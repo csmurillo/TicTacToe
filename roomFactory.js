@@ -163,8 +163,6 @@ class RoomFactory {
     // isRoomEmpty
     roomExist(roomID){
         const room = this.RoomFactory.get(roomID);
-        // console.log(this.RoomFactory.get(roomID));
-        // console.log('!~~!~~!~~!~~!~~!~~!~~!~~!~~!~~!~~!');
         if(room==undefined){
             return false;
         }

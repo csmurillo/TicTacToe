@@ -4,171 +4,6 @@
 .o-symbol{
     font-size: 90px;
 }
-#ttt-prompts-containers{
-    width:100vw; height:100vh;
-    position: absolute;
-    top:0px;
-}
-#ttt-prompts-placeholder{
-    position: relative;
-    top:0px;
-}
-#winner-rematch-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(0, 0, 0);
-}
-#rematch-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(0, 0, 0);
-}
-#set-winner-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(0, 0, 0);
-}
-.modal-dialog{
-    max-width: 600px!important;
-}
-#set-winner-content{
-    height:200px; width:100%;
-}
-#set-winner-title{
-    font-size: 42px;
-}
-#back-home{
-    border:none;
-    background-color: rgb(0, 81, 255);
-    padding:10px;
-    font-size:16px;
-    color:white;
-    border-radius: 5px;
-}
-#choose-symbol-prompt-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(0, 0, 0);
-}
-#opponent-lost-connection-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    color:rgb(0, 0, 0);
-}
-#opponent-lost-connection-title{
-    font-size: 64px;
-}
-#opponent-lost-connection{
-    font-size: 48px;
-}
-#player-declined-rematch-title{
-    font-size: 36px;
-}
-#player-redirect{
-    font-size: 28px;
-}
-#player-declined-rematch-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(0, 0, 0);
-}
-#wait-player-choose-symbol-prompt-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.43);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(0, 0, 0);
-}
-#wait-player-choose-turn-prompt-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.43);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(0, 0, 0);
-}
-#searching-for-player-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(9, 255, 0);
-}
-#player-turn-prompt-container{
-    width:100vw; height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
-    top: 0px;
-    font-size: 72px;
-    color:rgb(9, 255, 0);
-}
-/* rematch styles */
-#rematch-prompt{
-    font-size: 50px;
-}
-/*  */
-#mobile-players-details{
-    display:none;
-}
 #room{
     width: 100vw; height:100vh;
     display: flex;
@@ -237,23 +72,8 @@
     background-color: rgb(255, 255, 255);
     outline:1px solid black;
 }
-#choose-symbol-title-prompt-container{
-    font-size: 42px;
-    color:black;
-}
-#X-btn{
-    margin-right: 25px;
-}
-#X-btn,#O-btn{
-    font-size: 50px;
-}
-#title-prompt-container{
-    font-size: 42px;
-    color: black;
-}
-/* modal */
-#first-turn-btn,#second-turn-btn{
-    font-size: 24px;
+#mobile-players-details{
+    display:none;
 }
 /* win markers style */
 .win-container{
@@ -283,6 +103,195 @@
 .win-mobile-size{
     width: 20px; height: 20px;
 }
+/* ttt-prompts-containers */
+#ttt-prompts-containers{
+    width:100vw; height:100vh;
+    position: absolute;
+    top:0px;
+}
+#ttt-prompts-placeholder{
+    position: relative;
+    top:0px;
+}
+#choose-symbol-prompt-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(0, 0, 0);
+}
+#X-btn{
+    margin-right: 25px;
+}
+#X-btn,#O-btn{
+    font-size: 50px;
+}
+#choose-symbol-title-prompt-container{
+    font-size: 42px;
+    color:black;
+}
+#player-turn-prompt-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(9, 255, 0);
+}
+#choose-turn-title-prompt-container{
+    font-size: 42px;
+    color: black;
+}
+#first-turn-btn,#second-turn-btn{
+    font-size: 24px;
+}
+#winner-rematch-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(0, 0, 0);
+}
+#rematch-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(0, 0, 0);
+}
+#rematch-prompt-container{
+    margin-bottom: 20px;
+}
+#rematch-prompt{
+    font-size: 50px;
+}
+#rematch-true-btn{
+    font-size: 20px;
+    margin-right: 10px;
+}
+#rematch-false-btn{
+    font-size: 20px;
+}
+#player-declined-rematch-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(0, 0, 0);
+}
+#set-winner-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(0, 0, 0);
+}
+#opponent-lost-connection-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    top: 0px;
+    color:rgb(0, 0, 0);
+}
+#wait-player-choose-symbol-prompt-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(31, 31, 31, 0.781);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:white;
+}
+#wait-player-choose-turn-prompt-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(31, 31, 31, 0.781);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:white;
+}
+#searching-for-player-container{
+    width:100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(31, 31, 31, 0.781);
+    position: absolute;
+    top: 0px;
+    font-size: 72px;
+    color:rgb(9, 255, 0);
+}
+.modal-dialog{
+    max-width: 600px!important;
+}
+#set-winner-content{
+    height:200px; width:100%;
+}
+#set-winner-title{
+    font-size: 42px;
+}
+#back-home{
+    border:none;
+    background-color: rgb(0, 81, 255);
+    padding:10px;
+    font-size:16px;
+    color:white;
+    border-radius: 5px;
+}
+#opponent-lost-connection-title{
+    font-size: 64px;
+}
+#opponent-lost-connection{
+    font-size: 48px;
+}
+#player-declined-rematch-title{
+    font-size: 36px;
+}
+#player-redirect{
+    font-size: 28px;
+}
+/* end ttt-prompts-containers */
 @media (max-width: 676px) {
     .player-1-wins{
         border:3px solid rgb(9,255,0);
@@ -414,4 +423,3 @@
         font-size: 42px;
     }
 }
-

@@ -140,13 +140,11 @@ io.on('connection', (socket) => {
         let roomID=roomFactory.getUserRoomID(socket.userID);
         const player1=roomFactory.getRoomPlayer1(roomID);
         roomFactory.setRoomState(roomID,'choose-symbol');
-        console.log('emit to choose-symbol');
+
         if(player1==socket.userID){
             socket.emit('player-choose-symbol-prompt-session',{});
         }
         else{
-            console.log('waitplayerchoosesymbol');
-            // socket.to(''+roomID).emit('player-choose-symbol-prompt-session',{});
             socket.emit('wait-player-choose-symbol-prompt-session',{});
         }
     });

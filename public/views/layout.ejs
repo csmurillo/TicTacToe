@@ -19,7 +19,6 @@
         <script>
             const URL = ""+window.location.origin;
             const socket = io(URL,{ autoConnect: false});
-
             // reconnection
             function load(){
                 const session= localStorage.getItem('tttSessionID');
