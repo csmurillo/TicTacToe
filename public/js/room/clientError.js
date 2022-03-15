@@ -8,9 +8,9 @@ socket.on("connect_error", (err) => {
         usernameError.style.color="red";
         usernameError.style.fontSize="12px";
     }
-    console.log('-----------------------------------------------------------------------------');
-    console.log(err.message); // prints the message associated with the error
-    console.log('client error client error client error client error client error client error');
-    console.log('client error client error client error client error client error client error');
-    console.log('-----------------------------------------------------------------------------');
+    // console.log('-----------------------------------------------------------------------------');
+    // console.log(err.message); // prints the message associated with the error
+    // console.log('client error client error client error client error client error client error');
+    // console.log('client error client error client error client error client error client error');
+    // console.log('-----------------------------------------------------------------------------');
 });

@@ -1,6 +1,7 @@
 socket.on('game-end',({gameEnd,winner})=>{
     const setWinnerTitle=document.getElementById('set-winner-title');
     setWinnerTitle.innerHTML="Set Winner "+winner;
+    toggleTttPrompts('none');
     toggleTttPrompts('setWinnerContainer');
 });
 socket.on('game-end-redirect-home',()=>{
@@ -11,19 +12,20 @@ socket.on('game-end-redirect-home',()=>{
 socket.on('game-end-redirect-opponent-home',()=>{
     deleteCookies();
     deleteLocalStorageTicTacToeItems();
+    toggleTttPrompts('none');
     toggleTttPrompts('playerDeclinedRematchContainer');
-    setTimer();
+    setTimer('second-to-redirect');
 });
-function setTimer(){
+function setTimer(divId){
     return setTimeout(()=>{
-        let secondsLeft=parseInt(document.getElementById('second-to-redirect').innerHTML);
+        let secondsLeft=parseInt(document.getElementById(divId).innerHTML);
         if(secondsLeft>0){
             secondsLeft--;
-            document.getElementById('second-to-redirect').innerHTML=''+secondsLeft;
-            setTimer();
+            document.getElementById(divId).innerHTML=''+secondsLeft;
+            setTimer(divId);
         }
         if(secondsLeft==0){
-            window.location.href = '/';
+            window.location.href = window.location.origin;
         }
     },1000);
 }

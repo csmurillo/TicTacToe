@@ -8,7 +8,7 @@ const socketio = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
-const PORT = 3000||process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 const { UserSessionStorage } = require('./sessionStorage');
 const sessionStorage = new UserSessionStorage();
@@ -51,9 +51,7 @@ io.use((socket, next) => {
         }
     }
     const username = socket.handshake.auth.username;
-    console.log('inside socker middleware');
     const usernameExist=sessionStorage.userNameExist(username);
-    console.log('------------------------');
     if(usernameExist){
         return next(new Error("usernameExist"));
     }
@@ -69,7 +67,6 @@ io.use((socket, next) => {
 
 // set socketio stream
 io.on('connection', (socket) => {
-    console.log('a user connected userID'+socket.userID);
     // save session
     sessionStorage.saveSession(
         socket.sessionID,
@@ -83,9 +80,6 @@ io.on('connection', (socket) => {
 
     // join session
     socket.on('join-session',()=>{
-        console.log('---------------');
-        console.log(''+socket.username);
-        console.log('---------------');
         const roomID = roomFactory.joinRoom(socket.userID,socket.username);
 
         socket.emit('load-room-session',{
@@ -109,7 +103,6 @@ io.on('connection', (socket) => {
 
     // room session
     socket.on('room-session',()=>{
-        console.log('room-session-hit!!!');
         let roomID=roomFactory.getUserRoomID(socket.userID);
         // player1 will be first
         roomFactory.setRoomPlayerFirstTurn(roomID);
@@ -147,10 +140,13 @@ io.on('connection', (socket) => {
         let roomID=roomFactory.getUserRoomID(socket.userID);
         const player1=roomFactory.getRoomPlayer1(roomID);
         roomFactory.setRoomState(roomID,'choose-symbol');
+        console.log('emit to choose-symbol');
         if(player1==socket.userID){
             socket.emit('player-choose-symbol-prompt-session',{});
         }
         else{
+            console.log('waitplayerchoosesymbol');
+            // socket.to(''+roomID).emit('player-choose-symbol-prompt-session',{});
             socket.emit('wait-player-choose-symbol-prompt-session',{});
         }
     });
@@ -161,9 +157,7 @@ io.on('connection', (socket) => {
         roomFactory.setRoomState(roomID,'choose-turn');
         if(playerTurn==socket.userID){
             socket.emit('player-choose-turn-prompt-session',{});
-        }
-        else{
-            socket.emit('wait-player-choose-turn-prompt-session',{});
+            socket.to(''+roomID).emit('wait-player-choose-turn-prompt-session',{});
         }
     });
     socket.on('set-players-symbols',({playerSymbolChoosen})=>{
@@ -175,6 +169,7 @@ io.on('connection', (socket) => {
         // check for player1
         if(playerPos=='player-1'){
             if(playerSymbolChoosen=='X'||playerSymbolChoosen=='O'){
+                // roomFactory.setRoomState(roomID,'choose-symbol');
                 roomFactory.setPlayerSymbol(socket.userID,playerSymbolChoosen,roomID);
                 // set player symbol to other symbol
                 // example if player chose X opponent symbol will be O
@@ -193,6 +188,7 @@ io.on('connection', (socket) => {
         let playerPos=roomFactory.getPlayerPosition(socket.userID,roomID);
 
         if(playerPos=='player-1'){
+            // roomFactory.setRoomState(roomID,'choose-turn');
             let player2=roomFactory.getRoomPlayer2(roomID);
             if(turnChoosen=='first'){
                 roomFactory.setRoomPlayerTurn(socket.userID,roomID);
@@ -209,16 +205,12 @@ io.on('connection', (socket) => {
             let player1=roomFactory.getRoomPlayer1(roomID);
             if(turnChoosen=='first'){
                 roomFactory.setRoomPlayerTurn(socket.userID,roomID);
-                // roomFactory.setPlayerSymbol(socket.userID,'X',roomID);
-                // roomFactory.setPlayerSymbol(player1,'O',roomID);
             }
             else if(turnChoosen=='second'){
                 roomFactory.setRoomPlayerTurn(player1,roomID);
-                // roomFactory.setPlayerSymbol(player1,'X',roomID);
-                // roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
             }
         }
-        console.log('new board'+roomFactory.getRoomBoardGame(roomID).board);
+        roomFactory.setRoomState(roomID,'game');
         io.in(''+roomID).emit('tictactoe-start-game',{
             board:roomFactory.getRoomBoardGame(roomID).board,
             currentTurn:roomFactory.getCurrentRoomPlayerUsernameTurn(roomID),
@@ -229,9 +221,7 @@ io.on('connection', (socket) => {
         });
     });
     socket.on('player-info',()=>{
-        console.log('playerinfooooooooooooooooooooooooooo'+socket.userID);
         let roomID=roomFactory.getUserRoomID(socket.userID);
-        // roomFactory.getPlayerUserName(userID,roomID)
           io.to(socket.id).emit('player-info',{
               playerPosition:roomFactory.getPlayerPosition(socket.userID,roomID),
               playerUsername:roomFactory.getPlayerUserName(socket.userID,roomID),
@@ -250,7 +240,6 @@ io.on('connection', (socket) => {
         let player1=roomFactory.getRoomPlayer1(roomID);
         let player2=roomFactory.getRoomPlayer2(roomID);
 
-        roomFactory.setRoomState(roomID,'game');
         if(currentPlayerTurn==socket.userID){
             // opposite player symbol
             let oppositePlayerSymbol=null;
@@ -295,7 +284,6 @@ io.on('connection', (socket) => {
             // **************************************************
             // check if winner
             if(winningPlayer=='player1'){
-                // console.log('player won is player1'+roomFactory.getRoomPlayer1Username(roomID));
                 io.in(''+roomID).emit('game-finished',{
                     board:roomFactory.getRoomBoardGame(roomID).board,
                     winner:roomFactory.getRoomPlayer1Username(roomID),
@@ -313,7 +301,6 @@ io.on('connection', (socket) => {
                 }
                 else{
                     roomFactory.setRoomState(roomID,'rematch');
-                    // console.log('reachedplayer1'+roomID);
                     io.in(''+roomID).emit('rematch',{
                         rematch:true
                     });
@@ -356,6 +343,30 @@ io.on('connection', (socket) => {
                 });
             } 
         }
+    });
+    socket.on('rematch-state',()=>{
+        let roomID=roomFactory.getUserRoomID(socket.userID);
+
+        let player1RematchResponse=roomFactory.getPlayer1Rematch(roomID);
+        let player2RematchResponse=roomFactory.getPlayer2Rematch(roomID);
+
+        const player1=roomFactory.getRoomPlayer1(roomID);
+        if(player1==socket.userID){
+            if(player1RematchResponse){
+                socket.emit('rematch-state-wait-for-player',{});
+            }
+            else{
+                socket.emit('rematch-state-rematch-prompt',{});
+            }
+        }
+        else {
+            if (player2RematchResponse){
+                socket.emit('rematch-state-wait-for-player',{});
+            }else{
+                socket.emit('rematch-state-rematch-prompt',{});
+            }
+        }
+        
     });
     socket.on('rematch',({rematch})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
@@ -412,40 +423,36 @@ io.on('connection', (socket) => {
         }
     });
     socket.on('disconnect',()=>{
-        // console.log('disconnectdisconnectdisconnectdisconnectdisconnectdisconnect!!!!!!!disconnect');
-        // let roomID=roomFactory.getUserRoomID(socket.userID);
-        // const sessionValid=sessionStorage.sessionExist(socket.sessionID);
-        // if(sessionValid){
-        //     // save session
-        //     sessionStorage.saveSession(
-        //         socket.sessionID,
-        //         {
-        //             userID:socket.userID,
-        //             username:socket.username,
-        //             room:roomFactory.getUserRoom(socket.userID),
-        //             connected:false
-        //         }
-        //     );
-        // }
-        // setTimeout(()=>{
-        //     const session = sessionStorage.getSession(socket.sessionID);
-        //     if(session!=undefined){
-        //         if(session.connected){
-        //             console.log('user is connected');
-        //         }
-        //         else{
-        //             console.log('user lost connection');
-        //             // remove player sessions from server sessionStorage
-        //             let roomID = roomFactory.getUserRoomID(socket.userID);
-        //             reinitializeTictactoeRoom(socket.userID);
-        //             removePlayerSessions(roomID,socket.sessionID,socket.userID);
+        const sessionValid=sessionStorage.sessionExist(socket.sessionID);
+        if(sessionValid){
+            // save session
+            sessionStorage.saveSession(
+                socket.sessionID,
+                {
+                    userID:socket.userID,
+                    username:socket.username,
+                    room:roomFactory.getUserRoom(socket.userID),
+                    connected:false
+                }
+            );
+        }
+        setTimeout(()=>{
+            const session = sessionStorage.getSession(socket.sessionID);
+            if(session!=undefined){
+                if(session.connected){
+                }
+                else{
+                    // remove player sessions from server sessionStorage
+                    let roomID = roomFactory.getUserRoomID(socket.userID);
+                    reinitializeTictactoeRoom(socket.userID);
+                    removePlayerSessions(roomID,socket.sessionID,socket.userID);
 
-        //             socket.to(''+roomID).emit('game-end-opponent-disconnected',{
-        //                 disconnected:true
-        //             });
-        //         }
-        //     }
-        // },10000);
+                    socket.to(''+roomID).emit('game-end-opponent-disconnected',{
+                        disconnected:true
+                    });
+                }
+            }
+        },60000);
     });
 });
 server.listen(PORT,()=>{

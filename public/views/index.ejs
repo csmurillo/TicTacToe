@@ -1,7 +1,7 @@
 <div id="tic-tac-toe-main">
     <main>
         <div id="logo-container">
-            <img id="logo" src="http://localhost:3000/images/ticTacToe.png">
+            <img id="logo" src="./images/ticTacToe.png">
         </div>
         <div id="form-container">
             <form id="form" autocomplete="off">
@@ -23,11 +23,8 @@
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         let username = e.target.elements.username.value;
-        // console.log('val:'+username);
         socket.auth = { username };
-        console.log('what does socket connect return');
-        console.log(socket.connect());
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        socket.connect();
         socket.emit('join-session',{});
     });
     socket.on('load-room-session',({sessionID,userID,username,roomID})=>{

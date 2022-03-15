@@ -1,25 +1,24 @@
 socket.on('rematch',({rematch})=>{
-    console.log('rematch::rematch!!!!!!!!!!!!!!!!!');
-    // var rematchContainer=document.getElementById('rematch-container');
     if(rematch){
-        console.log('rematch container now viewable!');
         var tttPrompts= document.getElementById('ttt-prompts-containers');
         tttPrompts.style.zIndex="unset";
-        toggleTttPrompts('rematchContainer');
-        // $('#winnerRematchModal').modal('show');
-        // rematchContainer.innerHTML="Rematch";
+        toggleTttPrompts('none');
+        // toggleTttPrompts('rematchContainer');
+        var rematchContainer=document.getElementById('rematch-container');
+        rematchContainer.style.display="flex";
+        $('#rematchModal').modal('show');
     }
 });
 socket.on('start-rematch',()=>{
-    console.log('rematch!!!');
-     // emit to server choose turn prompt
+    // emit to server choose turn prompt
     // will display prompt to specified user
     socket.emit('choose-turn-prompt-session',{});
 });
 socket.on('waiting-for-rematch',()=>{
+    toggleTttPrompts('none');
     toggleTttPrompts('waitPlayerChooseTurnPromptContainer');
     var waitingForPlayer=document.getElementById("wait-for-player");
-    waitingForPlayer.innerHTML="Waiting For Player ...";
+    waitingForPlayer.innerHTML="Waiting For Player for rematch ...";
 });
 function rematch(answer){
     if(answer){
@@ -30,3 +29,24 @@ function rematch(answer){
     }
 }
 
+// 
+socket.on('rematch-state-wait-for-player',()=>{
+    toggleTttPrompts('none');
+    toggleTttPrompts('waitPlayerChooseTurnPromptContainer');
+    var waitingForPlayer=document.getElementById("wait-for-player");
+    waitingForPlayer.innerHTML="Waiting For Player for rematch ...";
+});
+socket.on('rematch-state-rematch-prompt',()=>{
+    toggleTttPrompts('none');
+    var rematchContainer=document.getElementById('rematch-container');
+    rematchContainer.style.display="flex";
+    $('#rematchModal').modal('show');
+
+    
+    let winnerRematchModal=document.getElementById('rematchModal');
+    winnerRematchModal.className="modal show";
+    setTimeout(()=>{
+        winnerRematchModal.setAttribute("style", "display:block !important; float:left;");
+    },400);
+});
+// 

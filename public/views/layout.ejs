@@ -17,14 +17,12 @@
       
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            const URL = "http://localhost:3000";
+            const URL = ""+window.location.origin;
             const socket = io(URL,{ autoConnect: false});
 
             // reconnection
             function load(){
-                console.log('load'+window.location.pathname);
                 const session= localStorage.getItem('tttSessionID');
-                console.log(session);
                 if(session){
                     socket.auth={session}
                     socket.connect();

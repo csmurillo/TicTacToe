@@ -35,7 +35,6 @@ socket.on('tictactoe-start-game',({board,currentTurn,player1Username,player2User
 // get current player info
 socket.on('player-info',(playerInfo)=>{
     const { playerPosition, playerUsername, playerSymbol }=playerInfo;
-    console.log(playerPosition+'playerPosiition');
     // save current player info
     localStorage.setItem('tttPlayerInfo',JSON.stringify(playerInfo));
     var playerUsername1=document.getElementById(playerPosition+"-username");
