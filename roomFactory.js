@@ -41,51 +41,43 @@ class BoardGame{
         if(this.board[0]&&this.board[1]&&this.board[2]&&this.board[0]==this.board[1]&& this.board[0]==this.board[2]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
-            // console.log('winnerh1');
             return winningPlayer;
         }
         else if(this.board[3]&&this.board[4]&&this.board[5]&&this.board[3]==this.board[4]&& this.board[3]==this.board[5]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[3]);
-            // console.log('winnerh2');
             return winningPlayer;
         }
         else if(this.board[6]&&this.board[7]&&this.board[8]&&this.board[6]==this.board[7]&& this.board[6]==this.board[8]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[6]);
-            // console.log('winnerh3');
             return winningPlayer;
         }
         // vertical win paths
         else if(this.board[0]&&this.board[3]&&this.board[6]&&this.board[0]==this.board[3]&& this.board[0]==this.board[6]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
-            // console.log('winnerv1');
             return winningPlayer;
         }
         else if(this.board[1]&&this.board[4]&&this.board[7]&&this.board[1]==this.board[4]&& this.board[1]==this.board[7]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[1]);
-            // console.log('winnerv2');
             return winningPlayer;
         }
         else if(this.board[2]&&this.board[5]&&this.board[8]&&this.board[2]==this.board[5]&& this.board[2]==this.board[8]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[2]);
-            // console.log('winnerv3');
             return winningPlayer;
         }
         // cross win paths
         else if(this.board[0]&&this.board[4]&&this.board[8]&&this.board[0]==this.board[4]&& this.board[0]==this.board[8]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[0]);
-            // console.log('winnerX1');
             return winningPlayer;
         }
         else if(this.board[2]&&this.board[4]&&this.board[6]&&this.board[2]==this.board[4]&& this.board[2]==this.board[6]){
             this.setBoardWinner();
             let winningPlayer=this.winningPlayer(player1Symbol,player2Symbol,this.board[2])
-            // console.log('winnerX2');
             return winningPlayer;
         }
         return false;
@@ -291,7 +283,7 @@ class RoomFactory {
             return room.player2Username;
         }
     }
-// ---
+
     getPlayerSymbol(userID,roomID){
         const room=this.RoomFactory.get(roomID);
         if(room.player1==userID){
@@ -392,22 +384,19 @@ class RoomFactory {
     }
     getRoomToBeReinitialized(roomID){
         const room=this.RoomFactory.get(roomID);
-        console.log(room);
-        console.log(room.player1Symbol);
-        console.log('-------------------------');
+        // console.log(room);
+        // console.log(room.player1Symbol);
+        // console.log('-------------------------');
         return room.roomToBeReinitialized;
     }
-    
     getPlayer2Symbol(roomID){
         const room=this.RoomFactory.get(roomID);
         return room.player2Symbol;
     }
-
     getRoomPlayerFirstTurn(roomID){
         const room=this.RoomFactory.get(roomID);
         return room.playerFirstTurn;
     }
-
     getCurrentRoomPlayerUsernameTurn(roomID){
         const room=this.RoomFactory.get(roomID);
         if(room.playerTurn==room.player1){
@@ -417,7 +406,6 @@ class RoomFactory {
             return room.player2Username;
         }
     }
-
     getCurrentRoomPlayerTurn(roomID){
         const room=this.RoomFactory.get(roomID);
         if(room.playerTurn==room.player1){
@@ -427,7 +415,6 @@ class RoomFactory {
             return room.player2;
         }
     }
-
     isRoomInProgress(roomID){
         const {roomInProgress}=this.RoomFactory.get(roomID);
         if(roomInProgress){
@@ -435,7 +422,6 @@ class RoomFactory {
         }
         return false;
     }
-
     isRoomPlayersExit(roomID){
         const {playersExit}=this.RoomFactory.get(roomID);
         if(playersExit){
@@ -447,8 +433,6 @@ class RoomFactory {
         const room=this.RoomFactory.get(roomID);
         this.RoomFactory.set(roomID,{...room,board:board});
     }
-    
-
     clearRoom(roomID){
         this.RoomFactory.set(roomID,{
             board:new BoardGame(),
@@ -470,6 +454,19 @@ class RoomFactory {
     roomToBeReinitialize(roomID){
         const room=this.RoomFactory.get(roomID);
         this.RoomFactory.set(roomID,{...room,roomToBeReinitialized:true});
+    }
+    resetRoomToBeReinitialize(){
+        let roomJoined=null;
+        for (const [key, value] of this.RoomFactory.entries()) {
+            if(value.roomToBeReinitialized==true){
+                console.log(key+'value'+value);
+                clearRoom(key);
+                console.log('-----after-----');
+                console.log(key+'value'+value);
+                break;
+            }
+        }
+        return roomJoined;
     }
     // debug purpose
     roomContent(){

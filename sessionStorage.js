@@ -22,12 +22,6 @@ class UserSessionStorage {
         }
         return null;
     }
-    sessionExist(sessionID){
-        if(this.userSessionStorage.get(sessionID)){
-            return true;
-        }
-        return false;
-    }
     userNameExist(username){
         for (const [key, value] of  this.userSessionStorage.entries()) {
             console.log(key, value.username);
@@ -37,8 +31,11 @@ class UserSessionStorage {
         }
         return false;
     }
+    sessionExist(sessionID){
+        if(this.userSessionStorage.get(sessionID)){
+            return true;
+        }
+        return false;
+    }
 }
 module.exports = { UserSessionStorage }
-
-
-

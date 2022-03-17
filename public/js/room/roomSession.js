@@ -16,6 +16,7 @@ socket.on('room-details',({roomID,roomState,currentPlayer,player1Username,player
     // remove searching for player message
     var searchingForPlayer=document.getElementById("searching-for-player");
     searchingForPlayer.style.display="none";
+    // load room state
     if(roomState=='choose-symbol'||roomState==''){
         // emit to server choose symbol prompt
         // will display prompt to specified user

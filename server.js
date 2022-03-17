@@ -22,12 +22,15 @@ app.use(express.static('public'));
 app.use('/images', express.static('public/images'))
 app.use('/css', express.static('public/css'))
 
+
+
 // set ejs
 app.use(expressLayouts);
 app.set('views', './public/views');
 app.set('view engine','ejs');
 
 const {isAuthenticated,redirect,existentRoom} = require('./middleware/verify-auth');
+const { setInterval, setTimeout } = require('timers/promises');
 // set routes
 app.get('',isAuthenticated(sessionStorage),existentRoom(roomFactory),redirect,(req,res)=>{
     res.render('index.ejs');
@@ -109,7 +112,6 @@ io.on('connection', (socket) => {
         // get room's player1 && player2
         let player1=roomFactory.getRoomPlayer1Username(roomID);
         let player2=roomFactory.getRoomPlayer2Username(roomID);
-        // debug working
 
         // add room id to socket as a property
         socket.roomID=roomID;
@@ -167,7 +169,6 @@ io.on('connection', (socket) => {
         // check for player1
         if(playerPos=='player-1'){
             if(playerSymbolChoosen=='X'||playerSymbolChoosen=='O'){
-                // roomFactory.setRoomState(roomID,'choose-symbol');
                 roomFactory.setPlayerSymbol(socket.userID,playerSymbolChoosen,roomID);
                 // set player symbol to other symbol
                 // example if player chose X opponent symbol will be O
@@ -186,17 +187,12 @@ io.on('connection', (socket) => {
         let playerPos=roomFactory.getPlayerPosition(socket.userID,roomID);
 
         if(playerPos=='player-1'){
-            // roomFactory.setRoomState(roomID,'choose-turn');
             let player2=roomFactory.getRoomPlayer2(roomID);
             if(turnChoosen=='first'){
                 roomFactory.setRoomPlayerTurn(socket.userID,roomID);
-                // roomFactory.setPlayerSymbol(socket.userID,'X',roomID);
-                // roomFactory.setPlayerSymbol(player2,'O',roomID);
             }
             else if(turnChoosen=='second'){
                 roomFactory.setRoomPlayerTurn(player2,roomID);
-                // roomFactory.setPlayerSymbol(player2,'X',roomID);
-                // roomFactory.setPlayerSymbol(socket.userID,'O',roomID);
             }
         }
         else if(playerPos=='player-2'){
@@ -450,9 +446,15 @@ io.on('connection', (socket) => {
                     });
                 }
             }
-        },60000);
+        },600);
     });
 });
+
+setTimeout(()=>{
+    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+},10);
+console.log('e');
+
 server.listen(PORT,()=>{
     console.log('liseting...');
 })

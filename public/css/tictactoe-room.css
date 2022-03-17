@@ -359,9 +359,9 @@
         color:blue;
         font-size: 20px;
     }
-    .modal-dialog{
+    /* .modal-dialog{ */
         /* max-width: 400px!important; */
-    }
+    /* } */
 }
 /* mobile phones */
 @media only screen 
