@@ -469,9 +469,9 @@ io.on('connection', (socket) => {
 });
 
 // clear rooms for new user to use
-setInterval(()=>{
-    roomFactory.resetRoomToBeReinitialize();
-},60000);
+// setInterval(()=>{
+//     roomFactory.resetRoomToBeReinitialize();
+// },60000);
 
 server.listen(PORT,()=>{
     console.log('liseting...');
