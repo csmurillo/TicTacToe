@@ -1,3 +1,4 @@
+// tictactoeStartGame.js holds everything related with start of tictactoe game
 socket.on('tictactoe-start-game',({board,currentTurn,player1Username,player2Username,player1Symbol,player2Symbol})=>{
     // save board to local storage for use during tictactoe game session
     localStorage.setItem('tttBoard',board);
@@ -34,7 +35,7 @@ socket.on('tictactoe-start-game',({board,currentTurn,player1Username,player2User
 
 // get current player info
 socket.on('player-info',(playerInfo)=>{
-    const { playerPosition, playerUsername, playerSymbol }=playerInfo;
+    const { playerPosition}=playerInfo;
     // save current player info
     localStorage.setItem('tttPlayerInfo',JSON.stringify(playerInfo));
     var playerUsername1=document.getElementById(playerPosition+"-username");

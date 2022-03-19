@@ -30,7 +30,8 @@ app.set('views', './public/views');
 app.set('view engine','ejs');
 
 const {isAuthenticated,redirect,existentRoom} = require('./middleware/verify-auth');
-const { setInterval, setTimeout } = require('timers/promises');
+
+
 // set routes
 app.get('',isAuthenticated(sessionStorage),existentRoom(roomFactory),redirect,(req,res)=>{
     res.render('index.ejs');
@@ -70,6 +71,7 @@ io.use((socket, next) => {
 
 // set socketio stream
 io.on('connection', (socket) => {
+
     // save session
     sessionStorage.saveSession(
         socket.sessionID,
@@ -119,6 +121,7 @@ io.on('connection', (socket) => {
         socket.join(''+roomID);
         
         if(player1&&player2){
+            console.log(player1+''+player2);
             roomFactory.setRoomInProgress(socket.roomID,true);
             // emit room details to both current players in room:roomID
             io.in(''+roomID).emit('room-details',{
@@ -160,6 +163,7 @@ io.on('connection', (socket) => {
             socket.to(''+roomID).emit('wait-player-choose-turn-prompt-session',{});
         }
     });
+
     socket.on('set-players-symbols',({playerSymbolChoosen})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
 
@@ -222,6 +226,7 @@ io.on('connection', (socket) => {
               playerSymbol:roomFactory.getPlayerSymbol(socket.userID,roomID)
           });
     });
+    
     socket.on('tictactoe-game',({markPos})=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
 
@@ -340,6 +345,7 @@ io.on('connection', (socket) => {
     });
     socket.on('rematch-state',()=>{
         let roomID=roomFactory.getUserRoomID(socket.userID);
+        let board = roomFactory.getRoomBoardGame(roomID);
 
         let player1RematchResponse=roomFactory.getPlayer1Rematch(roomID);
         let player2RematchResponse=roomFactory.getPlayer2Rematch(roomID);
@@ -347,17 +353,29 @@ io.on('connection', (socket) => {
         const player1=roomFactory.getRoomPlayer1(roomID);
         if(player1==socket.userID){
             if(player1RematchResponse){
-                socket.emit('rematch-state-wait-for-player',{});
+                socket.emit('rematch-state-wait-for-player',{
+                    player1Wins:board.getPlayer1Wins(),
+                    player2Wins:board.getPlayer2Wins()
+                });
             }
             else{
-                socket.emit('rematch-state-rematch-prompt',{});
+                socket.emit('rematch-state-rematch-prompt',{
+                    player1Wins:board.getPlayer1Wins(),
+                    player2Wins:board.getPlayer2Wins()
+                });
             }
         }
         else {
             if (player2RematchResponse){
-                socket.emit('rematch-state-wait-for-player',{});
+                socket.emit('rematch-state-wait-for-player',{
+                    player1Wins:board.getPlayer1Wins(),
+                    player2Wins:board.getPlayer2Wins()
+                });
             }else{
-                socket.emit('rematch-state-rematch-prompt',{});
+                socket.emit('rematch-state-rematch-prompt',{
+                    player1Wins:board.getPlayer1Wins(),
+                    player2Wins:board.getPlayer2Wins()
+                });
             }
         }
         
@@ -446,18 +464,22 @@ io.on('connection', (socket) => {
                     });
                 }
             }
-        },600);
+        },60000);
     });
 });
 
-setTimeout(()=>{
-    console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
-},10);
-console.log('e');
+// clear rooms for new user to use
+setInterval(()=>{
+    roomFactory.resetRoomToBeReinitialize();
+},60000);
 
 server.listen(PORT,()=>{
     console.log('liseting...');
 })
+
+
+
+
 
 
 

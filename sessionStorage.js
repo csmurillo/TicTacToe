@@ -24,7 +24,7 @@ class UserSessionStorage {
     }
     userNameExist(username){
         for (const [key, value] of  this.userSessionStorage.entries()) {
-            console.log(key, value.username);
+            // console.log(key, value.username);
             if(username.toLowerCase()==value.username.toLowerCase()){
                 return true;
             }

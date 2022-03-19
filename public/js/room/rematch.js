@@ -27,13 +27,16 @@ function rematch(answer){
         socket.emit('game-end',{});
     }
 }
-socket.on('rematch-state-wait-for-player',()=>{
+socket.on('rematch-state-wait-for-player',({player1Wins,player2Wins})=>{
+    playerWinsManager(player1Wins,player2Wins);
     toggleTttPrompts('none');
     toggleTttPrompts('waitPlayerChooseTurnPromptContainer');
     var waitingForPlayer=document.getElementById("wait-for-player");
     waitingForPlayer.innerHTML="Waiting For Player for rematch ...";
 });
-socket.on('rematch-state-rematch-prompt',()=>{
+socket.on('rematch-state-rematch-prompt',({player1Wins,player2Wins})=>{
+    playerWinsManager(player1Wins,player2Wins);
+
     toggleTttPrompts('none');
     var rematchContainer=document.getElementById('rematch-container');
     rematchContainer.style.display="flex";

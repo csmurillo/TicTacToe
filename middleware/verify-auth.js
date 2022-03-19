@@ -3,7 +3,7 @@ const isAuthenticated=(sessionStorage)=>{
         const cookieAuth=req.cookies.tttSessionID;
         // console.log(cookieAuth);
         const isCookieAuth=sessionStorage.sessionExist(cookieAuth);
-        console.log('session exsists'+isCookieAuth+'sessionid!:'+cookieAuth+'data'+JSON.stringify(sessionStorage.getSession(cookieAuth)));
+        // console.log('session exsists'+isCookieAuth+'sessionid!:'+cookieAuth+'data'+JSON.stringify(sessionStorage.getSession(cookieAuth)));
         if(isCookieAuth){
             req.isAuth=true;
             next();

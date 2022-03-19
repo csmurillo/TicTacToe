@@ -1,3 +1,4 @@
+// roomSession.js holds everything related with processing users to the start of a tictactoe game
 socket.emit('room-session',{});
 socket.on('room-details',({roomID,roomState,currentPlayer,player1Username,player2Username})=>{
     // save room to localstorage for page refresh
@@ -16,8 +17,11 @@ socket.on('room-details',({roomID,roomState,currentPlayer,player1Username,player
     // remove searching for player message
     var searchingForPlayer=document.getElementById("searching-for-player");
     searchingForPlayer.style.display="none";
+
+    console.log('in room details'+roomState+'::'+player1Username+':player2'+player2Username);
+
     // load room state
-    if(roomState=='choose-symbol'||roomState==''){
+    if(roomState=='choose-symbol'||roomState==''||roomState==undefined){
         // emit to server choose symbol prompt
         // will display prompt to specified user
         socket.emit('choose-symbol',{});

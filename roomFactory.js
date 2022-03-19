@@ -36,7 +36,6 @@ class BoardGame{
     }
     // check if there is a winner
     checkWinner(player1Symbol,player2Symbol){
-        // console.log('----- check winner ------');
         // horizontal win paths
         if(this.board[0]&&this.board[1]&&this.board[2]&&this.board[0]==this.board[1]&& this.board[0]==this.board[2]){
             this.setBoardWinner();
@@ -108,7 +107,7 @@ class BoardGame{
         this.boardWinner=true;
     }
     displayCurrentTictactoeBoard(){
-        console.log(this.board+'::');
+        // console.log(this.board+'::');
     }
 }
 
@@ -120,7 +119,7 @@ class RoomFactory {
     }
 
     create100Rooms(){
-        for(var i=0; i<100;i++){
+        for(var i=0; i<10;i++){
             this.RoomFactory.set(uuidv4(),{
                 board:new BoardGame(),
                 roomState:'',
@@ -384,9 +383,6 @@ class RoomFactory {
     }
     getRoomToBeReinitialized(roomID){
         const room=this.RoomFactory.get(roomID);
-        // console.log(room);
-        // console.log(room.player1Symbol);
-        // console.log('-------------------------');
         return room.roomToBeReinitialized;
     }
     getPlayer2Symbol(roomID){
@@ -434,7 +430,9 @@ class RoomFactory {
         this.RoomFactory.set(roomID,{...room,board:board});
     }
     clearRoom(roomID){
+        const room=this.RoomFactory.get(roomID);
         this.RoomFactory.set(roomID,{
+            ...room,
             board:new BoardGame(),
             player1:null,
             player1Username:null,
@@ -459,10 +457,7 @@ class RoomFactory {
         let roomJoined=null;
         for (const [key, value] of this.RoomFactory.entries()) {
             if(value.roomToBeReinitialized==true){
-                console.log(key+'value'+value);
-                clearRoom(key);
-                console.log('-----after-----');
-                console.log(key+'value'+value);
+                this.clearRoom(key);
                 break;
             }
         }

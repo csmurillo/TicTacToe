@@ -26,8 +26,5 @@
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.0",
     "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "@types/node": "^17.0.21"
   }
 }

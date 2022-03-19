@@ -13,3 +13,8 @@ socket.on('wait-player-choose-symbol-prompt-session',()=>{
     waitingForPlayerChooseSymbol.innerHTML="Waiting For Player choose symbol ...";
 });
 
+// choose symbol modal button function: room.ejs
+function chooseSymbol(symbol){
+    socket.emit('set-players-symbols',{playerSymbolChoosen:symbol});
+    socket.emit('choose-turn-prompt-session',{});
+}
