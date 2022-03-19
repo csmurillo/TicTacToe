@@ -434,6 +434,7 @@ class RoomFactory {
         this.RoomFactory.set(roomID,{
             ...room,
             board:new BoardGame(),
+            roomState:'',
             player1:null,
             player1Username:null,
             player1Symbol:null,
