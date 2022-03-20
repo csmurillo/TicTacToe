@@ -15,7 +15,7 @@ Tictactoe Online is a website where players across the internet can play a set o
 ## Overview
 
 ## Project
-    This application uses socket.io library for realtime communcation, to enable users to player tictactoe in realtime.
+- This application uses socket.io library for realtime communcation, to enable users to player tictactoe in realtime.
 
 ## Technologies
 - Node.js Express Socket.io 
