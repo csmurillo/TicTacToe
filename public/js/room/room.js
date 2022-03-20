@@ -8,23 +8,41 @@ function load(){
 load();
 // tictactoe board functions
 function tictactoeSymbolOver(event){
-    if(event.target.className=='ttt-block'){
-        var {playerSymbol}=JSON.parse(localStorage.getItem('tttPlayerInfo'));
-        event.target.style.zIndex="9999";
-        if(playerSymbol=='O'){
-            event.target.innerHTML="<div class='temp-symbol o-symbol center w-100 h-100' style='z-index:-2;'><i class='far fa-circle' style='z-index:-2;'></i></div>";
-        }
-        else if(playerSymbol=='X'){
-            event.target.innerHTML="<div class='temp-symbol x-symbol center w-100 h-100' style='z-index:-2;'><i class='fas fa-times' style='z-index:-2;'></i></div>";
+    console.log('somehow this also');
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {}
+    else{
+        if(event.target.className=='ttt-block'){
+            var {playerSymbol}=JSON.parse(localStorage.getItem('tttPlayerInfo'));
+            event.target.style.zIndex="9999";
+            if(playerSymbol=='O'){
+                event.target.innerHTML="<div class='temp-symbol o-symbol center w-100 h-100' style='z-index:-2;'><i class='far fa-circle' style='z-index:-2;'></i></div>";
+            }
+            else if(playerSymbol=='X'){
+                event.target.innerHTML="<div class='temp-symbol x-symbol center w-100 h-100' style='z-index:-2;'><i class='fas fa-times' style='z-index:-2;'></i></div>";
+            }
         }
     }
 }
 function tictactoeSymbolOut(event){
-    if(event.target.children[0].className=='temp-symbol x-symbol center w-100 h-100'){
-        event.target.innerHTML='';
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        console.log('mobile');
+        if(event.sourceCapabilities.firesTouchEvents==true){
+            if(event.target.children[0].className=='temp-symbol x-symbol center w-100 h-100'){
+                event.target.innerHTML='';
+            }
+            else if(event.target.children[0].className=='temp-symbol o-symbol center w-100 h-100'){
+                event.target.innerHTML='';
+            }
+        }
     }
-    else if(event.target.children[0].className=='temp-symbol o-symbol center w-100 h-100'){
-        event.target.innerHTML='';
+    else{
+        console.log('desktop');
+        if(event.target.children[0].className=='temp-symbol x-symbol center w-100 h-100'){
+            event.target.innerHTML='';
+        }
+        else if(event.target.children[0].className=='temp-symbol o-symbol center w-100 h-100'){
+            event.target.innerHTML='';
+        }
     }
 }
 function updateBoard(board){
