@@ -41,6 +41,7 @@ app.get('/:roomID',isAuthenticated(sessionStorage),existentRoom(roomFactory),red
     res.render('room.ejs');
 });
 
+var roomFactoryWrite=false;
 // set socketio middleware
 io.use((socket, next) => {
     const sessionID = socket.handshake.auth.session;
@@ -85,6 +86,7 @@ io.on('connection', (socket) => {
 
     // join session
     socket.on('join-session',()=>{
+
         const roomID = roomFactory.joinRoom(socket.userID,socket.username);
 
         socket.emit('load-room-session',{
@@ -108,6 +110,7 @@ io.on('connection', (socket) => {
 
     // room session
     socket.on('room-session',()=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
         // player1 will be first
         roomFactory.setRoomPlayerFirstTurn(roomID);
@@ -121,7 +124,6 @@ io.on('connection', (socket) => {
         socket.join(''+roomID);
         
         if(player1&&player2){
-            console.log(player1+''+player2);
             roomFactory.setRoomInProgress(socket.roomID,true);
             // emit room details to both current players in room:roomID
             io.in(''+roomID).emit('room-details',{
@@ -138,10 +140,12 @@ io.on('connection', (socket) => {
                 searching:true,
                 roomState:roomFactory.getRoomState(socket.roomID)
             });
-        }     
+        } 
+        roomFactoryWrite=false;    
     });
     // choose symbol
     socket.on('choose-symbol',()=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
         const player1=roomFactory.getRoomPlayer1(roomID);
         roomFactory.setRoomState(roomID,'choose-symbol');
@@ -152,9 +156,11 @@ io.on('connection', (socket) => {
         else{
             socket.emit('wait-player-choose-symbol-prompt-session',{});
         }
+        roomFactoryWrite=false;
     });
     // choose turn prompt session
     socket.on('choose-turn-prompt-session',()=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
         let playerTurn = roomFactory.getRoomPlayerFirstTurn(socket.roomID);
         roomFactory.setRoomState(roomID,'choose-turn');
@@ -162,9 +168,11 @@ io.on('connection', (socket) => {
             socket.emit('player-choose-turn-prompt-session',{});
             socket.to(''+roomID).emit('wait-player-choose-turn-prompt-session',{});
         }
+        roomFactoryWrite=false;
     });
 
     socket.on('set-players-symbols',({playerSymbolChoosen})=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
 
         let playerPos=roomFactory.getPlayerPosition(socket.userID,roomID);
@@ -184,9 +192,11 @@ io.on('connection', (socket) => {
                 }
             }
         }
+        roomFactoryWrite=false;
     });    
     // set players turn
     socket.on('set-players-turns',({turnChoosen})=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
         let playerPos=roomFactory.getPlayerPosition(socket.userID,roomID);
 
@@ -217,17 +227,21 @@ io.on('connection', (socket) => {
             player1Symbol:roomFactory.getPlayer1Symbol(roomID),
             player2Symbol:roomFactory.getPlayer2Symbol(roomID)
         });
+        roomFactoryWrite=false;
     });
     socket.on('player-info',()=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
           io.to(socket.id).emit('player-info',{
               playerPosition:roomFactory.getPlayerPosition(socket.userID,roomID),
               playerUsername:roomFactory.getPlayerUserName(socket.userID,roomID),
               playerSymbol:roomFactory.getPlayerSymbol(socket.userID,roomID)
           });
+          roomFactoryWrite=false;
     });
     
     socket.on('tictactoe-game',({markPos})=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
 
         // turn of current player
@@ -342,8 +356,10 @@ io.on('connection', (socket) => {
                 });
             } 
         }
+        roomFactoryWrite=false;
     });
     socket.on('rematch-state',()=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
         let board = roomFactory.getRoomBoardGame(roomID);
 
@@ -378,9 +394,10 @@ io.on('connection', (socket) => {
                 });
             }
         }
-        
+        roomFactoryWrite=false;
     });
     socket.on('rematch',({rematch})=>{
+        roomFactoryWrite=true;
         let roomID=roomFactory.getUserRoomID(socket.userID);
         roomFactory.setPlayerRematch(socket.userID,roomID);
 
@@ -400,6 +417,7 @@ io.on('connection', (socket) => {
             // waiting player will be emitted waiting for other player rematch
             socket.emit('waiting-for-rematch',{});
         }  
+        roomFactoryWrite=false;
     });
     const removeUserSession = (sessionID)=>{
         sessionStorage.removeSession(sessionID);
@@ -415,6 +433,7 @@ io.on('connection', (socket) => {
         removeUserSession(opponentSessionID);
     }
     socket.on('game-end',()=>{
+        roomFactoryWrite=true;
         // remove player sessions from server sessionStorage
         let roomID = roomFactory.getUserRoomID(socket.userID);
         if(roomID){
@@ -425,16 +444,20 @@ io.on('connection', (socket) => {
             // emit to opponent
             socket.to(''+roomID).emit('game-end-redirect-opponent-home',{});
         }
+        roomFactoryWrite=false;
     });
     socket.on('game-end-2',()=>{
+        roomFactoryWrite=true;
         // remove player sessions from server sessionStorage
         let roomID = roomFactory.getUserRoomID(socket.userID);
         if(roomID){
             reinitializeTictactoeRoom(socket.userID);
             removePlayerSessions(roomID,socket.sessionID,socket.userID);
         }
+        roomFactoryWrite=false;
     });
     socket.on('disconnect',()=>{
+        roomFactoryWrite=true;
         const sessionValid=sessionStorage.sessionExist(socket.sessionID);
         if(sessionValid){
             // save session
@@ -448,7 +471,9 @@ io.on('connection', (socket) => {
                 }
             );
         }
+        roomFactoryWrite=false;
         setTimeout(()=>{
+            roomFactoryWrite=true;
             const session = sessionStorage.getSession(socket.sessionID);
             if(session!=undefined){
                 if(session.connected){
@@ -464,13 +489,18 @@ io.on('connection', (socket) => {
                     });
                 }
             }
+            roomFactoryWrite=false;
         },60000);
     });
 });
 
 // clear rooms for new user to use
 setInterval(()=>{
-    roomFactory.resetRoomToBeReinitialize();
+    if(roomFactoryWrite==false){
+        roomFactory.resetRoomToBeReinitialize();
+        // console.log('reset room setInterval');
+    }
+    // console.log('set interval');
 },60000);
 
 server.listen(PORT,()=>{

@@ -27,7 +27,6 @@ function tictactoeSymbolOut(event){
         event.target.innerHTML='';
     }
 }
-
 function updateBoard(board){
     for(var i=0; i<board.length;i++){
         var tttBoardCurrentPlayer=document.getElementById("block-"+i);
@@ -50,7 +49,6 @@ var waitPlayerChooseSymbolContainer=document.getElementById('wait-player-choose-
 var chooseSymbolContainer=document.getElementById('choose-symbol-prompt-container');
 var setWinnerContainer=document.getElementById('set-winner-container');
 var rematchContainer=document.getElementById('rematch-container');
-var winnerRematchContainer=document.getElementById('winner-rematch-container');
 var playerDeclinedRematchContainer=document.getElementById('player-declined-rematch-container');
 var opponentLostConnectionContainer=document.getElementById('opponent-lost-connection-container');
 var searchingForPlayerContainer=document.getElementById('searching-for-player-container');
@@ -65,7 +63,6 @@ if(promptToShow=='none'){
     $('#player-turn-modal').modal('hide');
     setWinnerContainer.style.display="none";
     rematchContainer.style.display="none";
-    winnerRematchContainer.style.display="none";
     searchingForPlayerContainer.style.display="none";
     waitPlayerChooseTurnPromptContainer.style.display="none";
     playerTurnPromptContainer.style.display="none";
@@ -84,6 +81,9 @@ else if(promptToShow=='chooseSymbolContainer'){
 else if(promptToShow=='setWinnerContainer'){
     setWinnerContainer.style.display="flex";
     $('#setWinnerModal').modal('show');
+    $('#setWinnerModal').on('shown.bs.modal',function(e){
+        document.getElementById('ttt-prompts-containers').style.zIndex='9999';
+    });
 }
 else if(promptToShow=='waitPlayerChooseTurnPromptContainer'){
     waitPlayerChooseTurnPromptContainer.style.display="flex";
@@ -103,10 +103,6 @@ else if(promptToShow=='rematchContainer'){
     rematchContainer.style.display="flex";
     $('#rematchModal').modal('show');
 }
-else if(promptToShow=='winnerRematchContainer'){
-    winnerRematchContainer.style.display="flex";
-    $('#winnerRematchModal').modal('show');
-}
 else if(promptToShow=='searchingForPlayerContainer'){
     searchingForPlayerContainer.style.display="flex";
 }
@@ -115,3 +111,4 @@ else if(promptToShow=='playerTurnPromptContainer'){
     $('#player-turn-modal').modal('show');
 }
 }
+

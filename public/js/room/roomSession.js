@@ -17,8 +17,7 @@ socket.on('room-details',({roomID,roomState,currentPlayer,player1Username,player
     // remove searching for player message
     var searchingForPlayer=document.getElementById("searching-for-player");
     searchingForPlayer.style.display="none";
-
-    console.log('in room details'+roomState+'::'+player1Username+':player2'+player2Username);
+    toggleTttPrompts('none');
 
     // load room state
     if(roomState=='choose-symbol'||roomState==''||roomState==undefined){

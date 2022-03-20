@@ -8,6 +8,7 @@ socket.on('player-choose-symbol-prompt-session',()=>{
 });
 socket.on('wait-player-choose-symbol-prompt-session',()=>{
     // show to specified user
+    toggleTttPrompts('none');
     toggleTttPrompts('waitPlayerChooseSymbolContainer');
     var waitingForPlayerChooseSymbol=document.getElementById("wait-for-player-choose-symbol");
     waitingForPlayerChooseSymbol.innerHTML="Waiting For Player choose symbol ...";

@@ -20,10 +20,12 @@
     font-size: 18px;
 }
 #find-player-btn{
-    width:100px; height: 40px;
+    /* width:100px; height: 40px; */
     font-size: 14px;
     background-color: white;
-    border: none;
+    border: 1px solid black;
+    border-radius:5px;
+    padding:5px 10px 5px 10px;
 }
 #find-player-btn:hover{
     cursor: pointer;
@@ -40,23 +42,24 @@
         align-items: center;
     }
     #logo{
-        width:400px; height: 150px;
+        width:750px; height: 250px;
     }
     #logo-container{
-        margin-bottom: 40px;
+        margin-bottom: 80px;
     }
     #username-container{
-        margin-bottom: 40px;
+        margin-bottom: 80px;
     }
     #username{
-        width:300px; height: 60px;
-        font-size: 40px;
+        width:550px; height: 120px;
+        font-size: 4em;
     }
     #find-player-btn{
-        width:200px; height: 80px;
-        font-size: 30px;
+        /* width:250px; height: 100px; */
         background-color: white;
         border: none;
+        font-size: 3em;
+        padding:20px 50px 20px 50px;
     }
   }
   /* Tablet */
