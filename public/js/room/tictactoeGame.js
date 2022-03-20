@@ -8,8 +8,8 @@ function tictactoeBoard(markPos){
 socket.on('tictactoe-game',({board,currentTurn})=>{
     var tttBoardCurrentPlayer=document.getElementById("ttt-board-current-player");
     var tttBoardCurrentPlayerMobile=document.getElementById("ttt-board-current-player-mobile");
-    tttBoardCurrentPlayer.innerHTML='Current Turn '+currentTurn;
-    tttBoardCurrentPlayerMobile.innerHTML='Current Turn '+currentTurn;
+    tttBoardCurrentPlayer.innerHTML='Current Turn:<br/> '+currentTurn;
+    tttBoardCurrentPlayerMobile.innerHTML='Current Turn:<br/> '+currentTurn;
 
     // update board
     updateBoard(board);

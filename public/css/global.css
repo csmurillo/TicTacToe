@@ -1,3 +1,6 @@
+html,body{
+    overflow: hidden;
+}
 .center{
     display: flex;
     justify-content: center;
