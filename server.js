@@ -22,15 +22,12 @@ app.use(express.static('public'));
 app.use('/images', express.static('public/images'))
 app.use('/css', express.static('public/css'))
 
-
-
 // set ejs
 app.use(expressLayouts);
 app.set('views', './public/views');
 app.set('view engine','ejs');
 
 const {isAuthenticated,redirect,existentRoom} = require('./middleware/verify-auth');
-
 
 // set routes
 app.get('',isAuthenticated(sessionStorage),existentRoom(roomFactory),redirect,(req,res)=>{
@@ -505,12 +502,4 @@ setInterval(()=>{
 
 server.listen(PORT,()=>{
     console.log('liseting...');
-})
-
-
-
-
-
-
-
-
+});
